@@ -1,0 +1,20 @@
+<br><div style=" display: inline-flex; width: 80%; margin-left: 10%;" id="request-container-{{member.pk}}" class="dummy-request">
+		<div style=" display: inline-flex; width: 100%;">
+			<div>
+				<img src="{{member.pic.url}}" style=" width: 100px; width: 100px; border-radius: 25%;">
+			</div>
+			<div style="margin-left: 2%; margin-top: auto; margin-bottom: auto; color: white;">
+				<a href="{% url 'profile' member.pk %}" style=" color: white;">
+					{{member.full_name}}
+				</a>
+			</div>
+		</div>
+		<div style=" margin-top: auto; margin-bottom: auto; width: 50%; display: inline-flex;">
+			<button class="accept" onclick="AcceptUserRequestToGroup('{{group.pk}}', '{{member.pk}}')">
+				Accept
+			</button>
+			<button style=" width: 100px; " class="alert" onclick="DenyUserRequestToGroup('{{group.pk}}', '{{member.pk}}')">
+				Deny
+			</button>
+		</div>
+	</div><br>

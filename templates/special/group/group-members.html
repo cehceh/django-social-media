@@ -1,0 +1,25 @@
+{% extends 'home/ex.html' %}
+{% load static %}
+{% block body %}
+<link rel="stylesheet" type="text/css" href="{% static 'group/memebersPage.css' %}">
+<div class="root">
+	<div class="search-container">
+		<input type="search" id="Members-Search-Input" name="member-search" data-pk = '{{group.pk}}'>
+		<button style="background-color: rgba(0, 0, 255, 0.5); border-radius: 5px; font-size: 15px; margin-left: 10px; color: white; padding: 5px; border: transparent; outline: none;">+ Invite</button>
+		{% if request.user == group.admin or request.user in group.group_sub_admin.all %}
+		<a href="{% url 'group-request' group.pk %}">
+		<button style="background-color: rgba(0, 0, 255, 0.5); border-radius: 5px; font-size: 15px; margin-left: 10px; color: white; padding: 5px; border: transparent; outline: none;">
+
+			<mark style=" background-color: red;">
+				{{group.group_Waiting_memebers.count}}
+			</mark>requests
+		</button>
+	</a>{% endif %}
+	</div>
+	<br>
+	<div class="members-container" id="members-container">
+		{% include 'fragments/group/MembersPage.html' %}
+	</div>
+</div>
+<script type="text/javascript" src="{% static 'group/memebersPage.js' %}"></script>
+{% endblock %}

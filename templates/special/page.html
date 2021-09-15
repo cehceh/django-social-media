@@ -1,0 +1,60 @@
+{% extends 'home/ex.html' %}
+{% load static %}
+{% block body %}
+
+
+<div class="GroupProfileModal" style="margin-top: -2.4%; margin-right: 0; width: 85%; overflow: hidden;">
+	<div class="modal-content" style="width: 100%; background-color: transparent; margin-right: -1.8%; border: transparent;">
+		<div style=" width: 100%; ">
+			<div class="cover" style=" width: 100%;">
+				<img src="{{page.page_cover_photo.url}}" style=" width: inherit; height: 350px;">
+			</div>
+			<div class="profile-pic" style=" margin: auto; width: 50%; margin-left: 37.5%; margin-top: -12%; ">
+				<img src="{{page.page_photo.url}}" style=" width: inherit; border-radius: 30%;">
+			</div>
+			<div style=" margin: auto; width: 25%; text-align: center;">
+				{% if page.page_bio %}
+				<div style=" z-index: 10000000; margin-top: 2%; width: 100%; margin: auto;">
+					<a href="javascript:void(0)" style="color: white;">{{page.page_bio}}</a>
+				</div>
+				{% endif %}
+				<div style=" z-index: 10000000; margin-top: {% if page.page_bio %} 5%; {% else %} 5%; {% endif %}  width: fit-content; margin: auto;">
+					<a href="javascript:void(0)" id="userHref" style=" color: dodgerblue; font-size: 20px; color: white;">
+						{{page.page_name}}
+					</a>
+				</div>
+			</div>
+			{% if not request.user == page.page_admin %}
+			<div class="profile-options">
+				<div>
+					<form method="POST" action="javascript:void(0);">
+						{% csrf_token %}
+						<button>
+							{{page.page_likes.count}}
+						{% if request.user in page.page_likes.all %}
+						Unlike
+						{% else %}
+						Like
+						{% endif %}
+					</button>
+					</form>
+				</div>
+				<div>
+					<a href="#" target="blank">
+						<button>Chat</button>
+					</a>
+				</div>
+			</div>
+			{% endif %}
+		</div>
+		<div class="modal-posts-container" style="margin-top: {% if not request.user == page.page_admin %} 5{% else %} 1{% endif %}%;">
+			{% for post in page.post_page.all %}
+			{% include 'special/post.html' %}
+			{% endfor %}
+		</div>
+	</div>
+</div><br>
+<script type="text/javascript" src="{% static 'fragments/group/scripts.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'profile/profile.css' %}">
+
+{% endblock %}

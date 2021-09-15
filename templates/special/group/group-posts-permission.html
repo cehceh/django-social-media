@@ -1,0 +1,414 @@
+{% extends 'special/group/Groupex.html' %}
+
+{% block body %}
+
+<div class="container" style="display: inline-flex; padding: 10px; margin: auto;">
+	<div>
+		<form action="#">
+			{%csrf_token%}
+			<button class="agree">Accept all</button>
+		</form>
+	</div>
+	<div>
+		<form action="%">
+			{% csrf_token %}
+			<button class="alert">Deny all</button>
+		</form>
+	</div>
+</div>
+
+{% for post in posts %}
+	
+{% if post.share %}
+
+<div class="post-container" id="post-{{post.pk}}">
+		<div class="post-top-container">
+			<div class="above-post-content-container">
+				<div class="post-top-actions-and-info-container" >
+					<div class="post-info">
+						<div class="post-author-img-container">
+							<img src="{% if not post.page %}
+							{{post.author.pic.url}}
+							{% else %}
+							{{post.page.page_photo.url}}
+							{% endif %}">
+						</div>
+						<div class="name-and-date">
+							<p>
+										{% if post.page and post.group and not group %}
+											<a href="#">{{post.page.page_name}}</a> <b> --> </b> <a href="#"> {{post.group.group_name}}</a>
+
+										{% elif post.page %}
+										<a href="{% url 'page' post.page.pk %}">{{post.page.page_name}}</a>
+
+										{% else %}
+											<a href="{% url 'profile' post.author.pk %}">{{post.author.full_name|title}} </a>
+											{% if post.group %}
+												<b> --> </b> <a href="{% url 'group' post.group.pk %}">  {{post.group.group_name}}</a>
+											{% endif %}
+										{% endif %}
+								</p>
+							<small>
+								{{post.date}}
+							</small>
+						</div>
+										
+					</div>
+				</div>
+				<div class="post-top-actions-and-trigger-container">
+					<div class="post-top-actions-trigger-container">
+						<button onclick="topActions('{{post.pk}}')" id="post-{{post.pk}}-top-trigger">. . .</button>						
+					</div>
+					<div class="post-top-actions-container" style="display: none;" id="post-{{post.pk}}-top-actions-container">
+						<br>
+						<div>
+							<button class="action-button" id="savePostBtn-{{post.pk}}" onclick="SavePost('{{post.pk}}')">Save post</button>
+						</div>
+						<br>
+						<div>
+							<button class="action-button">
+								Edit post
+							</button>
+						</div>
+						{% if request.user == post.author or post.group.group_admin or request.user.is_superuser == True or request.user in post.group.group_sub_admin.all %}
+						<br>
+						<div>
+							<button class="action-button" id="DeleteBtn-'{{post.pk}}'" onclick="DeletePostTrigger('{{post.pk}}')">
+								Delete post
+							</button>
+						</div>
+						{% endif %}
+						<br>
+						{% if request.user != post.author %}
+							<div>
+								<button class="action-button" id="opennotify-'{{post.pk}}'" onclick="openNotify('{{post.pk}}')">
+									activate post notifications
+								</button>
+							</div>
+							{% endif %}
+					</div>
+				</div>
+			</div>
+
+			<div class="post-content-container">
+				<p id="post-{{post.pk}}-content-paragraph">
+					{% if post.content|length > 150 %}
+						{{post.content|truncatechars:150}} <small style="cursor: pointer;" onclick="document.getElementById('post-{{post.pk}}-content-paragraph').innerHTML = '{{post.content}}';">Read mode</small>
+					{% else %}
+
+						{{post.content}}
+
+					{% endif %}
+					
+				</p>
+			</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="shared-post-container" style=" padding: 10px;">
+
+	<div class="post-container" id="post-{{post.share.pk}}">
+			<div class="post-top-container">
+				<div class="above-post-content-container">
+					<div class="post-top-actions-and-info-container" >
+						<div class="post-info">
+							<div class="post-author-img-container">
+								<img src="{% if not post.share.page %}
+							{{post.share.author.pic.url}}
+							{% else %}
+							{{post.share.page.page_photo.url}}
+							{% endif %}">
+							</div>
+							<div class="name-and-date">
+								<p>
+										{% if post.share.page and post.share.group and not group %}
+											<a href="#">{{post.share.page.page_name}}</a> <b> --> </b> <a href="#"> {{post.share.group.group_name}}</a>
+
+										{% elif post.share.page %}
+										<a href="{% url 'page' post.share.page.pk %}">{{post.share.page.page_name}}</a>
+
+										{% else %}
+											<a href="{% url 'profile' post.share.author.pk %}">{{post.share.author.full_name|title}} </a>
+											{% if post.share.group %}
+												<b> --> </b> <a href="{% url 'group' post.share.group.pk %}">  {{post.share.group.group_name}}</a>
+											{% endif %}
+										{% endif %}
+								</p>
+								<small>
+									{{post.share.date}}
+								</small>
+							</div>
+											
+						</div>
+					</div>
+					<div class="post-top-actions-and-trigger-container">
+						<div class="post-top-actions-trigger-container">
+							<button onclick="SharedtopActions('{{post.share.pk}}', '{{post.pk}}')" id="shared-{{post.share.pk}}-post-{{post.pk}}-top-trigger">. . .</button>						
+						</div>
+						<div class="post-top-actions-container" style="display: none;" id="shared-{{post.share.pk}}-post-{{post.pk}}-top-actions-container">
+							<br>
+							<div>
+								<button class="action-button" id="savePostBtn-{{post.share.pk}}" onclick="SavePost('{{post.share.pk}}')">Save post</button>
+							</div>
+							<br>
+							<div>
+								<button class="action-button">
+									Edit post
+								</button>
+							</div>
+							{% if request.user == post.share.author or post.share.group.group_admin or request.user.is_superuser == True or request.user in post.share.group.group_sub_admin.all %}
+							<br>
+							<div>
+								<button class="action-button" id="DeleteBtn-'{{post.share.pk}}'" onclick="DeletePostTrigger('{{post.share.pk}}')">
+									Delete post
+								</button>
+							</div>
+							{% endif %}
+							<br>
+							{% if request.user != post.share.author %}
+							<div>
+								<button class="action-button" id="opennotify-'{{post.share.pk}}'" onclick="openNotify('{{post.share.pk}}')">
+									activate post notifications
+								</button>
+							</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+
+				<div class="post-content-container">
+					<p id="post-{{post.share.pk}}-content-paragraph">
+						{% if post.share.content|length > 150 %}
+							{{post.share.content|truncatechars:150}} <small style="cursor: pointer;" onclick="document.getElementById('post-{{post.share.pk}}-content-paragraph').innerHTML = '{{post.share.content}}';">Read mode</small>
+						{% else %}
+
+							{{post.share.content}}
+
+						{% endif %}
+						
+					</p>
+				</div>
+				{% if post.share.post_file.all %}
+				<div class="post-media-container">
+					{% with post.share.post_file.all.first as file %}
+					<div id="post-{{post.share.pk}}-media-display">
+						{% if file.img %}
+						<img src="{{file.img.url}}" onclick="DisplayFullImg(this);">
+						{% elif file.video %}
+						<video src="{{file.video.url}}" controls></video>
+						{% else %}
+						<audio controls>
+							<source src="{{file.record.url}}" type="audio/ogg">
+						</audio>
+							
+					{% endif %}
+							
+						
+					</div>
+
+					{% endwith %}
+
+					<div class="indicators-container-container">
+						<div class="indicators-container">
+							{% for file in post.share.post_file.all %}
+							<div  class="indicator post-{{post.share.pk}}-indicators" 
+							{% if forloop.first %}
+
+							style="background-color: white;"
+
+							{% endif %} 
+
+							{% if file.img %}
+							onclick="postImagesDisplay('{{post.share.pk}}', '{{file.img.url}}', '{{forloop.counter}}')"
+
+							{% elif file.video %}
+							onclick="postVideosDisplay('{{post.share.pk}}', '{{file.video.url}}', '{{forloop.counter}}')"
+
+							{%  else %}
+							onclick="postRecordsDisplay('{{post.share.pk}}', '{{file.audio.url}}', '{{forloop.counter}}')"
+							{% endif %}
+
+							></div>&nbsp
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+				{% endif %}
+			</div></div>
+
+</div>
+
+
+
+
+
+
+
+
+
+		</div>
+	</div>
+	<br>
+
+
+{% else %}
+
+<div class="post-container" id="post-{{post.pk}}">
+		<div class="post-top-container">
+			<div class="above-post-content-container">
+				<div class="post-top-actions-and-info-container" >
+					<div class="post-info">
+						<div class="post-author-img-container">
+							<img src="
+
+							{% if not post.page %}
+							{{post.author.pic.url}}
+							{% else %}
+							{{post.page.page_photo.url}}
+							{% endif %}
+							">
+							
+						</div>
+						<div class="name-and-date">
+							<p>
+										{% if post.page and post.group and not group %}
+											<a href="#">{{post.page.page_name}}</a> <b> --> </b> <a href="#"> {{post.group.group_name}}</a>
+
+										{% elif post.page %}
+										<a href="{% url 'page' post.page.pk %}">{{post.page.page_name}}</a>
+
+										{% else %}
+											<a href="{% url 'profile' post.author.pk %}">{{post.author.full_name|title}} </a>
+											{% if post.group %}
+												<b> --> </b> <a href="{% url 'group' post.group.pk %}">  {{post.group.group_name}}</a>
+											{% endif %}
+										{% endif %}
+								</p>
+							<small>
+								{{post.date}}
+							</small>
+						</div>
+										
+					</div>
+				</div>
+				<div class="post-top-actions-and-trigger-container">
+					<div class="post-top-actions-trigger-container">
+						<button onclick="topActions('{{post.pk}}')" id="post-{{post.pk}}-top-trigger">. . .</button>						
+					</div>
+					<div class="post-top-actions-container" style="display: none;" id="post-{{post.pk}}-top-actions-container">
+						<br>
+						<div>
+							<button class="action-button" id="savePostBtn-{{post.pk}}" onclick="SavePost('{{post.pk}}')">Save post</button>
+						</div>
+						{% if request.user == post.author or post.group.group_admin or request.user.is_superuser == True or request.user in post.group.group_sub_admin.all %}
+						<br>
+						<div>
+							<button class="action-button" id="DeleteBtn-'{{post.pk}}'" onclick="DeletePostTrigger('{{post.pk}}')">
+								Delete post
+							</button>
+						</div>
+						{% endif %}
+						<br>
+						{% if request.user != post.author %}
+						<div>
+							<button class="action-button" id="opennotify-'{{post.pk}}'" onclick="openNotify('{{post.pk}}')">
+								activate post notifications
+							</button>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+
+			<div class="post-content-container">
+				<p id="post-{{post.pk}}-content-paragraph">
+					{% if post.content|length > 150 %}
+						{{post.content|truncatechars:150}} <small style="cursor: pointer;" onclick="document.getElementById('post-{{post.pk}}-content-paragraph').innerHTML = '{{post.content}}';">Read more</small>
+					{% else %}
+
+						{{post.content}}
+
+					{% endif %}
+					
+				</p>
+			</div>
+			{% if post.post_file.all %}
+			<div class="post-media-container">
+				{% with post.post_file.all.first as file %}
+				<div id="post-{{post.pk}}-media-display">
+					{% if file.img %}
+					<img src="{{file.img.url}}" onclick="DisplayFullImg(this);">
+					{% elif file.video %}
+					<video src="{{file.video.url}}" controls></video>
+					{% else %}
+					<audio controls>
+						<source src="{{file.record.url}}" type="audio/ogg">
+					</audio>
+						
+				{% endif %}
+						
+					
+				</div>
+
+				{% endwith %}
+
+				<div class="indicators-container-container">
+					<div class="indicators-container">
+						{% for file in post.post_file.all %}
+						<div  class="indicator post-{{post.pk}}-indicators" 
+						{% if forloop.first %}
+
+						style="background-color: white;"
+
+						{% endif %} 
+
+						{% if file.img %}
+						onclick="postImagesDisplay('{{post.pk}}', '{{file.img.url}}', '{{forloop.counter}}')"
+
+						{% elif file.video %}
+						onclick="postVideosDisplay('{{post.pk}}', '{{file.video.url}}', '{{forloop.counter}}')"
+
+						{%  else %}
+						onclick="postRecordsDisplay('{{post.pk}}', '{{file.audio.url}}', '{{forloop.counter}}')"
+						{% endif %}
+
+						></div>&nbsp
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+	<br>
+
+
+{% endif %}
+
+<div class="container" style="display: inline-flex; padding: 10px; margin: auto;">
+	<div>
+		<form action="#">
+			{%csrf_token%}
+			<button class="agree">Accept</button>
+		</form>
+	</div>
+	<div>
+		<form action="%">
+			{% csrf_token %}
+			<button class="alert">Deny</button>
+		</form>
+	</div>
+</div>
+
+
+{% endfor %}
+
+{% endblock %}

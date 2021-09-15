@@ -1,0 +1,74 @@
+{% extends 'home/ex.html' %}
+{% load static %}
+
+{% block body %}
+<div class="GroupProfileModal">
+	<div class="modal-content" style="width: 100%; background-color: transparent; border: transparent;">
+		<div style=" width: 100%;">
+			<div class="cover" style=" width: 100%;">
+				<img src="{{user.cover.url}}" style=" width: inherit; height: 350px;">
+			</div>
+			<div class="profile-pic" style=" margin: auto; width: 50%; margin-left: 37.5%; margin-top: -12%; ">
+				<img src="{{user.pic.url}}" style=" width: inherit; border-radius: 30%;">
+			</div>
+			<div style=" margin: auto; width: 25%;">
+				{% if user.bio %}
+				<div style=" z-index: 10000000; margin-top: 2%; width: 100%; text-align: center;">
+					<p style="color: white;">{{user.bio}}</p>
+				</div>
+				{% endif %}
+				<div style=" z-index: 10000000; margin-top: {% if user.bio %} 5%; {% else %} 5%; {% endif %} text-align: center; width: fit-content; margin: auto;">
+					<a href="javascript:void(0)" id="userHref" style=" color: dodgerblue; font-size: 20px; color: white;">
+						{{user.full_name}}
+					</a>
+				</div>
+			</div>
+			{% if not request.user == user %}
+			<div class="profile-options">
+				<div>
+					<form method="POST" {% if request.user in user.friends.all %} action="{% url 'remove-friend' user.pk %}" {% else %} action="{% url 'add-friend' user.pk %}" {% endif %}>
+						{% csrf_token %}
+						<button>
+						{% if request.user in user.waiting.all %}
+						Cancel request
+						{% elif request.user in user.friend.all %}
+						Remove friend
+						{% else %}
+						Add friend
+						{% endif %}
+					</button>
+					</form>
+				</div>
+				<div>
+					<a href="{% url 'messages' user.pk %}" target="blank">
+						<button>Chat</button>
+					</a>
+				</div>
+				{% if user.allow_anonymous == True %}
+				<div>
+					<a href="{% url 'AnonymousChat' user.pk %}" target="blank">
+						<button>Anonymous chat</button>
+					</a>
+				</div>
+				{% endif %}
+				<div>
+					<form method="POST" action="{% url 'block-user' user.pk %}">{% csrf_token %}
+						<button>
+						Block
+					</button>
+					</form>
+				</div>
+			</div>
+			{% endif %}
+		</div>
+		<div class="modal-posts-container" style="margin-top: {% if not request.user == user %} 5{% else %} 1{% endif %}%;">
+			{% for post in posts %}
+			{% include 'special/post.html' %}
+			{% endfor %}
+		</div>
+	</div>
+</div><br>
+<script type="text/javascript" src="{% static 'fragments/group/scripts.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'profile/profile.css' %}">
+
+{% endblock %}

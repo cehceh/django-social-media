@@ -1,0 +1,159 @@
+{% load tags %}
+<div class="shared-post-container" style=" padding: 10px;">
+
+	<div class="post-container" id="post-{{post.share.pk}}" style="border: 1px solid #404164;">
+			<div class="post-top-container">
+				<div class="above-post-content-container">
+					<div class="post-top-actions-and-info-container" >
+						<div class="post-info">
+							<div class="post-author-img-container">
+								<img {% if group and group == post.share.group %} onclick="getMemberProfile('{{post.share.author.pk}}', '{{group.pk}}')" {% endif %} src="{% if not post.share.page %}
+							{{post.share.author.pic.url}}
+							{% else %}
+							{{post.share.page.page_photo.url}}
+							{% endif %}">
+							</div>
+							<div class="name-and-date">
+								<p>
+										{% if post.share.page and post.share.group and not group %}
+											<a href="#">{{post.share.page.page_name}}</a> <b> --> </b> <a href="#"> {{post.share.group.group_name}}</a>
+
+										{% elif post.share.page %}
+										<a href="{% url 'page' post.share.page.pk %}">{{post.share.page.page_name}}</a>
+
+										{% else %}
+											<a href="{% url 'profile' post.share.author.pk %}">{{post.share.author.full_name|title}} </a>
+											{% if post.share.group != group %}
+												<b> --> </b> <a href="{% url 'group' post.share.group.pk %}">  {{post.share.group.group_name}}</a>
+											{% endif %}
+										{% endif %}
+								</p>
+								<small>
+									{{post.share.date}}
+								</small>
+							</div>
+											
+						</div>
+					</div>
+					<div class="post-top-actions-and-trigger-container">
+						<div class="post-top-actions-trigger-container">
+							<button onclick="SharedtopActions('{{post.share.pk}}', '{{post.pk}}')" id="shared-{{post.share.pk}}-post-{{post.pk}}-top-trigger">. . .</button>						
+						</div>
+						<div class="post-top-actions-container" style="display: none;" id="shared-{{post.share.pk}}-post-{{post.pk}}-top-actions-container">
+							<br>
+							<div>
+								<button class="action-button" id="saveSharedPostBtn-{{post.share.pk}}" onclick="SavePost('{{post.share.pk}}')">{% if post.share in request.user.saved_posts.all %}
+							Un{% endif %}Save post</button>
+							</div>
+							<br>
+							<div>
+								<button class="action-button">
+									Edit post
+								</button>
+							</div>
+							{% if request.user == post.share.author or request.user == post.share.group.group_admin or request.user.is_superuser == True or request.user in post.share.group.group_sub_admin.all %}
+							<br>
+							<div>
+								<button class="action-button" id="DeleteBtn-'{{post.share.pk}}'" onclick="DeletePostTrigger('{{post.share.pk}}')">
+									Delete post
+								</button>
+							</div>
+							{% endif %}
+							<br>
+							{% if request.user != post.share.author %}
+							<div>
+								<button class="action-button" id="opennotify-'{{post.share.pk}}'" onclick="openNotify('{{post.share.pk}}')">
+									activate post notifications
+								</button>
+							</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+
+				<div class="post-content-container">
+
+				<p id="post-{{post.pk}}-content-paragraph">
+					{% if post.content|length > 150 %}
+						{% if searched %}
+						{% for word in post.content.split %}
+						{% if word in searched %}
+							<mark>{{word}}</mark>
+						{% else %}
+						{{word}}
+						{% endif %}
+						{% endfor %}
+						{% else %}
+						{{post.content|truncatechars:150}}
+						{% endif %}	 
+					<small style="cursor: pointer;" onclick="this.innerHTML = '{{post.content}}';">Read more</small>
+					{% else %}
+
+						{% if searched %}
+						{% for word in post.content.split %}
+						{% if word in searched %}
+							<mark>{{word}}</mark>
+						{% else %}
+						{{word}}
+						{% endif %}
+						{% endfor %}
+						{% else %}
+						{{post.content}}
+						{% endif %}	 
+
+					{% endif %}
+				</p>
+				</div>
+				{% if post.share.post_file.all %}
+				<div class="post-media-container">
+					{% with post.share.post_file.all.first as file %}
+					<div id="shared-post-{{post.share.pk}}-media-display">
+						{% if file.media|videoEx == True  %}
+						<img src="{{file.media.url}}" onclick="DisplayFullImg(this);">
+						{% else %}
+						<video src="{{file.media.url}}" controls></video>
+							
+					{% endif %}
+							
+						
+					</div>
+					<p class='files-caption' id="shared-post-{{file.post.pk}}-files-caption">
+					{% if file.caption %}
+					<br>
+					{% if file.caption|length > 150 %}
+						{{file.caption|truncatechars:150}} <small style="cursor: pointer;" onclick="this.innerHTML = '{{file.caption}}';">Read more</small>
+					{% else %}
+
+						{{file.caption}}
+
+					{% endif %}<br>
+					{% endif %}
+				</p>
+					{% endwith %}
+
+					<div class="indicators-container-container">
+						<div class="indicators-container">
+							{% for file in post.share.post_file.all %}
+							<div  class="indicator shared-post-{{post.share.pk}}-indicators" 
+							{% if forloop.first %}
+
+							style="background-color: white;"
+
+							{% endif %} 
+
+							{% if file.media|videoEx == True  %}
+							onclick="sharedpostImagesDisplay('{{post.share.pk}}', '{{file.media.url}}', '{{forloop.counter}}', '{{file.caption}}')"
+
+							{% else %}
+							onclick="sharedpostVideosDisplay('{{post.share.pk}}', '{{file.media.url}}', '{{forloop.counter}}', '{{file.caption}}')"
+							{% endif %}
+
+							></div>&nbsp
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+				{% endif %}
+			</div></div>
+
+</div>

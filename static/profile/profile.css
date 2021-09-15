@@ -1,0 +1,24 @@
+.profile-options{
+	 width: 100%; display: inline-flex; margin-top: 2%;
+}
+.profile-options div{
+	margin-left: auto; margin-right: auto;
+}
+.profile-options * {
+	margin-left: 10px;
+}
+.profile-options button{
+	width: 150px;
+	padding: 5px;
+	font-size: 15px;
+
+}
+
+.GroupProfileModal{
+	width: 90%;
+	margin-left: 10%;
+}
+
+.GroupProfileModal .modal-content{
+	margin-top: -1%;
+}

@@ -1,0 +1,216 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" href="javascript:void(0);">
+
+  <!--
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/> 
+
+-->
+
+<script type="text/javascript" src="{% static 'scripts/jquery/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/special/all.js' %}"></script>
+	<title>{% block title %}Extensions page{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main/home.css' %}">
+  <script type="text/javascript" src="{% static 'scripts/special/specials.js' %}"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/main/ex.css' %}">
+	<script type="text/javascript" src="{% static 'scripts/home/socket.js' %}"></script>
+	<script type="text/javascript" src="{% static 'scripts/home/ex-functions.js' %}"></script>
+	{% block head %}
+
+	{% endblock %}
+</head>
+<body style=" position: relative; ">
+  {% csrf_token %}
+	<div class="wrapper">
+    <nav>
+      <input type="checkbox" id="show-search">
+      <input type="checkbox" id="show-menu">
+      <label for="show-menu" class="menu-icon"><i class="fas fa-bars"></i></label>
+      <div class="content">
+      <div class="logo"><a href="javascript:void(0);">WaTeR</a></div>
+        <ul class="links">
+          <li><a href="{% url 'home' %}">Home</a></li>
+          
+          <li>
+            <a href="javascript:void(0);" class="desktop-link">Notifications</a>
+            <input type="checkbox" id="show-features">
+            <label for="show-features">Notifications</label>
+
+            <ul id="notifies-ul">
+            	{% if not notifies %}
+            	<li id="no-notifies"><a href="javascript:void(0);">No notifications yet</a></li>
+            	{% else %}
+            	{% for notify in notifies %}
+              {% include 'fragments/nav/notify.html' %}
+              {% endfor %}
+              {% endif %}
+            </ul>
+          </li>
+          <li>
+            <a href="javascript:void(0);" class="desktop-link">Requests</a>
+            <input type="checkbox" id="show-services">
+            <label for="show-services">Requests</label>
+            <ul id="requests-ul">
+              {% if not request.user.waiting.all %}
+              <li id="no-requests"><a href="javascript:void(0);">No Requests yet</a></li>
+              {% else %}
+            	{% for req in request.user.waiting.all %}
+              {% include 'fragments/nav/FriendRequest.html' %}
+            	{% endfor %}
+              {% endif %}
+
+            </ul>
+          </li>
+
+          <li>
+            <a href="javascript:void(0);" class="desktop-link">Messages</a>
+            <input type="checkbox" id="show-Messages">
+            <label for="show-Messages">Messages</label>
+
+            <ul id="Messages-ul">
+              {% if not navmessages %}
+              <li id="no-Messages"><a href="javascript:void(0);">No Messages yet</a></li>
+              {% else %}
+              {% for message in navmessages %}
+              {% include 'fragments/nav/NavMessages.html' %}
+              
+              {% endfor %}
+              {% endif %}
+            </ul>
+          </li>
+
+          <li>
+            <a href="javascript:void(0);" class="desktop-link">Hi, {{request.user.first_name|title}}</a>
+            <input type="checkbox" id="show-options">
+            <label for="show-options">{{request.user.first_name|title}}</label>
+            <ul>
+              <li><a href="{% url 'profile' request.user.pk %}">&nbsp profile</a></li>
+              <li><a href="javascript:void(0);">&nbsp settings</a></li>
+              <li><a href="/accounts/logout">&nbsp Logout</a></li>
+            </ul>
+          </li>
+
+          
+        </ul>
+      </div>
+      <label for="show-search" class="search-icon not-activated" onclick="searchDiv(this);"><i class="fas fa-search"></i></label>
+      <form action="{% url 'search' %}" method="POST" class="search-box">
+      	{% csrf_token %}
+        <input type="text" name="searched" placeholder="Type Something to Search..." required>
+        <button type="submit" class="go-icon"><i class="fas fa-long-arrow-alt-right"></i></button>
+      </form>
+    </nav>
+  </div>
+  <br>
+<br>
+
+  <br><br><br>
+
+<div class="page-root" style=" height: 100%; display: inline-flex; width: 100%;">
+  <div class="aside-container" style="width: 5%;">
+    <div class="aside" >
+      <a href="javascript:void(0);">
+        <button>Pages</button>
+      </a>
+      <a href="{% url 'user-groups' %}">
+        <button>Groups</button>
+      </a>
+      <a href="{% url 'friends' %}">
+        <button>Friends</button>
+      </a>
+      <a href="{% url 'save-post' %}">
+        <button style=" width: 150px; margin-left: 5px;">Saved posts</button>
+      </a>
+    </div>
+  </div>
+  {% block body %}
+
+{% endblock %}
+</div>
+
+
+<div id="searchModal" class="modal">
+
+  <div class="modal-content" id="search-modal-content">
+    <span class="close" id="SearchModal-close">&times;</span>
+     <div style="border-radius: 5px; border: 5px black;">
+  {% for search in request.user.searcher.all %}
+    <div style=" border: 5px grey;">
+      {% if search.object_type == 3 %}
+        <div style=" display: inline-flex;">
+          <a href="{% url 'profile' search.user.pk %}">
+            <div style=" display: inline-flex;">
+            <div>
+              <img src="{{search.user.pic.url}}" style="border-radius:4px; width: 50px;">
+            </div>
+            <div>
+              <p>{{search.user.full_name}}</p>
+            </div>
+            </div>
+          </a>
+        </div>
+      {% elif search.object_type == 2 %}
+        <div style=" display: inline-flex;">
+          <a href="{% url 'page' search.page.pk %}">
+            <div style=" display: inline-flex;">
+            <div>
+              <img src="{{search.page.page_photo.url}}"  style="border-radius:4px; width: 50px;">
+            </div>
+            <div>
+              <p>{{search.page.page_name}}</p>
+            </div>
+          </div>
+          </a>
+        </div>
+
+      {% elif search.object_type == 4  %}
+        <div style=" display: inline-flex;">
+          <a href="{% url 'group' search.group.pk %}">
+            <div style=" display: inline-flex;">
+            <div>
+              <img src="{{search.group.group_cover_photo.url}}" style="border-radius:4px; width: 50px;">
+            </div>
+            <div>
+              <p>{{search.group.group_name}}</p>
+            </div>
+          </div>
+          </a>
+        </div>
+      {% else %}
+      <div style=" display: inline-flex;">
+        <div>
+          <p>{{search.searched}}</p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <br>
+  {% endfor %}
+  </div>
+  </div>
+
+
+
+</div>
+
+
+
+<div id="myModal" class="modal">
+
+  <div class="modal-content" id="modal-content">
+    <span class="close" id="modal-close">&times;</span>
+  </div>
+
+</div>
+
+
+<script type="text/javascript">
+	socket({{request.user.pk}});
+</script>
+</body>
+</html>

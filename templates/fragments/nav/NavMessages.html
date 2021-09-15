@@ -1,0 +1,27 @@
+<li id="notify-{{notify.id}}" class="notification-container">
+
+  <a 
+
+                {% if message.sender == request.user %}
+                href="{% url 'messages' message.receiver.pk %}" id="nav-message-{{message.receiver.pk}}" 
+                {% else %} id="nav-message-{{message.sender.pk}}" 
+                href="{% url 'messages' message.sender.pk %}"
+                {% endif %} 
+                >
+                <div class="message-container">
+                  <div style="height: 75px;">
+                    <div class="request-sender-img-container" style=" display: inline-flex; word-break: break-all;">
+                    <img {% if not message.sender == request.user %} src="{{message.sender.pic.url}}" {% else %} src="{{message.receiver.pic.url}}" {% endif %}>
+                    <small style="color: white;">
+  {% if message.sender == request.user %}
+  {{message.receiver.full_name}}
+  {% else %}
+  {{message.sender.full_name}}
+  {% endif %}
+</small></div> <div style=" margin-left: 5px;">{% if message.sender == request.user %} You {% else %} {{message.sender.full_name|title}} {% endif %} : {{ message.content }}
+                </div>
+                      <div style=" margin-top: -10%;">
+              <small style=" float: right;">{{message.date}}</small></div>
+              </div></div>
+               
+              </a></li>

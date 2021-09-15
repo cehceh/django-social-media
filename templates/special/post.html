@@ -1,0 +1,157 @@
+{% load tags %}
+<div class="post-container" id="post-{{post.pk}}">
+		<div class="post-top-container">
+			<div class="above-post-content-container">
+				<div class="post-top-actions-and-info-container" >
+					<div class="post-info">
+						<div class="post-author-img-container">
+							<img src="{% if not post.page %}
+							{{post.author.pic.url}}
+							{% else %}
+							{{post.page.page_photo.url}}
+							{% endif %}" {% if group %} onclick="getMemberProfile('{{post.author.pk}}', '{{group.pk}}')" {% endif %}>
+						</div>
+						<div class="name-and-date">
+							<p>
+										{% if post.page and post.group and not group %}
+											<a href="#">{{post.page.page_name}}</a> <b> --> </b> <a href="#"> {{post.group.group_name}}</a>
+
+										{% elif post.page %}
+										<a href="{% url 'page' post.page.pk %}">{{post.page.page_name}}</a>
+
+										{% else %}
+											<a href="{% url 'profile' post.author.pk %}">{{post.author.full_name|title}} </a>
+											{% if post.group != group %}
+												<b> --> </b> <a href="{% url 'group' post.group.pk %}">  {{post.group.group_name}}</a>
+											{% endif %}
+										{% endif %}
+								</p>
+							<small>
+								{{post.date}}
+							</small>
+						</div>
+										
+					</div>
+				</div>
+				<div class="post-top-actions-and-trigger-container">
+					<div class="post-top-actions-trigger-container">
+						<button onclick="topActions('{{post.pk}}')" id="post-{{post.pk}}-top-trigger">---</button>						
+					</div>
+					<div class="post-top-actions-container" style="display: none;" id="post-{{post.pk}}-top-actions-container">
+						<br>
+						<div>
+							<button class="action-button" id="savePostBtn-{{post.pk}}" onclick="SavePost('{{post.pk}}')">{% if post in request.user.saved_posts.all %}
+							Un{% endif %}Save post</button>
+						</div>
+						<br>
+						<div>
+							<button class="action-button">
+								Edit post
+							</button>
+						</div>
+						{% if request.user == post.author or request.user == post.group.group_admin or request.user.is_superuser == True or request.user in post.group.group_sub_admin.all %}
+						<br>
+						<div>
+							<button class="action-button" id="DeleteBtn-'{{post.pk}}'" onclick="DeletePostTrigger('{{post.pk}}')">
+								Delete post
+							</button>
+						</div>
+						{% endif %}
+						<br>
+						{% if request.user != post.author %}
+							<div>
+								<button class="action-button" id="opennotify-'{{post.pk}}'" onclick="openNotify('{{post.pk}}')">
+									activate post notifications
+								</button>
+							</div>
+							{% endif %}
+					</div>
+				</div>
+			</div>
+
+			<div class="post-content-container">
+
+				<p id="post-{{post.pk}}-content-paragraph">
+					{% if post.content|length > 150 %}
+						{% if searched %}
+						{% for word in post.content.split %}
+						{% if word in searched %}
+							<mark>{{word}}</mark>
+						{% else %}
+						{{word}}
+						{% endif %}
+						{% endfor %}
+						{% else %}
+						{{post.content|truncatechars:150}}
+						{% endif %}	 
+					<small style="cursor: pointer;" onclick="this.innerHTML = '{{post.content}}';">Read more</small>
+					{% else %}
+
+						{% if searched %}
+						{% for word in post.content.split %}
+						{% if word in searched %}
+							<mark>{{word}}</mark>
+						{% else %}
+						{{word}}
+						{% endif %}
+						{% endfor %}
+						{% else %}
+						{{post.content}}
+						{% endif %}	 
+
+					{% endif %}
+					
+				</p>
+			</div>
+
+
+
+
+
+
+
+
+
+
+{% if post.share %}
+
+{% include 'fragments/snippets/post/postShare.html' %}
+{% else %}
+{% include 'fragments/snippets/post/postMedia.html' %}
+
+{% endif %}
+
+
+
+
+
+
+
+		</div>
+		<hr>
+		<div class="post-middle" id="post-{{post.pk}}-middle"> 
+		{% include 'fragments/snippets/post/post-middle.html' %}
+		</div>
+		<hr>
+		<div class="post-bottom">
+			<div class="comments-container modal" id="post-{{post.pk}}-comments-container" style=" height: fit-content; width: fit-content; margin: all;">
+				<div class="modal-content" style="margin-top: 0%; overflow: auto;">
+					<span class="close" id="post-{{post.pk}}-comments-close-span">
+						&times
+					</span>
+					<div>
+						<form method="POST" action="javascript:void(0);" onsubmit="SubmitComment(this, '{{post.pk}}')">
+							{% csrf_token %}
+							<input type="text" name="content">
+							<input type="file" name="media">
+							<button>Comment</button>
+						</form>
+					</div>
+					<div id="post-{{post.pk}}-comments-div" style="margin-top: 5%; display: grid;"></div>
+				</div>
+				
+			</div>
+			
+		</div>
+	</div>
+	<br>

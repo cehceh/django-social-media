@@ -1,0 +1,29 @@
+{% extends 'home/ex.html' %}
+{% block body %}<br><br>
+{% if not group.post_group.all %}
+
+			<div style="text-align: center;">
+		<h1>No posts to display.</h1>
+	</div>
+			{% else %}
+			{% for post in posts %}
+
+{% with post=post %}
+	{% include 'special/post.html' %}
+{% endwith %}
+			{% endfor %}
+			{% endif %}
+		</div>
+
+
+
+
+</div>
+<div id="myModal" class="modal">
+
+  <div class="modal-content" id="modal-content">
+    <span class="close" id="modal-close">&times;</span>
+  </div>
+
+</div>
+{% endblock %}

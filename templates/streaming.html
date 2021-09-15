@@ -1,0 +1,56 @@
+{% extends 'home/ex.html' %}
+{% block body %}
+<div id="streaming-container">
+	<audio src="#" id="my-streaming"></audio>
+	<br>
+</div>
+
+<script type="text/javascript">
+		
+
+	function ChatSocket() {
+	    const chatSocket = new WebSocket(
+	       'ws://'
+	        + window.location.host
+	        + '/ws/stream/'
+	    );
+
+
+	    var device = navigator.mediaDevices.getUserMedia({audio: true});
+		device.then(function(stream) {
+                var recorder = new window.MediaRecorder(stream);
+                recorder.start();
+                recorder.ondataavailable = function(e){
+                    var blob = new Blob(e.data, {type: 'audio/ogg; codecs=opus'});
+                    chatSocket.send(blob);
+                    
+
+                }                          
+                })
+
+/** 
+ const audio_url = window.URL.createObjectURL(blob);
+
+                    let record = new File([blob], "record-name.ogg", { type: 'audio/ogg; codecs=opus', lastModified:new Date().getTime()});
+                    let container = new DataTransfer();
+                    container.items.add(record); **/
+
+	    chatSocket.onmessage = function(e) {
+	        const data = JSON.parse(e.data);
+	        console.log(data)
+	    };
+
+	    chatSocket.onclose = function(e) {
+	    };
+
+
+	        
+	    
+
+	}
+
+	ChatSocket()
+</script>
+
+
+{% endblock %}

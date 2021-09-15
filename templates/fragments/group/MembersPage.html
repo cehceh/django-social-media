@@ -1,0 +1,39 @@
+		<div class="members-container">
+			<div class="description">
+				<p>
+					Admin
+				</p>
+			</div>
+			<div class="members-div-container">
+			{% with member=group.group_admin %}
+			{% include 'fragments/group/member.html' %}<br>
+			{% endwith %}
+			</div>
+		</div>
+		<br><br>{% if group.group_sub_admin.all %}
+		<div class="members-container">
+			<div class="description">
+				<p>
+					SubAdmins
+				</p>
+			</div>
+			<div class="members-div-container">
+			{% for member in group.group_sub_admin.all|slice:"20" %}
+			{% include 'fragments/group/member.html' %}<br>
+			{% endfor %}
+			</div>
+		</div>
+		<br><br>{% endif %}
+		<div class="members-container">
+			<div class="description">
+				<p>
+					Members
+				</p>
+			</div>
+			<div class="members-div-container">
+			{% for member in group.group_members.all|slice:"20" %}
+			{% include 'fragments/group/member.html' %}<br>
+			{% endfor %}
+			</div>
+		</div>
+		

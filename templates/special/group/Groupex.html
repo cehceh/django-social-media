@@ -1,0 +1,47 @@
+{% extends 'home/ex.html' %}
+{% load static %}
+
+<script type="text/javascript" src="{% static 'scripts/special/group.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/main/special/group.css' %}">
+
+<div class="group-fixed-options">
+	<div>
+		<a href="{% url 'group-fixed-posts' group.pk %}">
+			<button>
+				Fixed posts
+			</button>
+		</a>
+	</div>
+
+	<div>
+		<a href="{% url 'group-members' group.pk %}">
+			<button>
+				Group members
+			</button>
+		</a>
+	</div>
+			
+	<div>
+		<form action="javascript:void(0);">
+			 {% csrf_token %}
+			<input type="search" name="group_search" placeholder="Search in group?">
+		</form>
+	</div>
+			
+	<div>
+		<form method="POST" action="{% url 'leave-group' group.pk %}">
+					
+			<a href="#">
+				<button class="alert">
+					{% if request.user != group.group_Admin %}
+						Delete group
+					{% else %}
+						Leave group
+					{% endif %}
+				</button>
+			</a>
+		</form>
+	</div>
+</div>
+{% block body %}
+{% endblock %}

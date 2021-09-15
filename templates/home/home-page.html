@@ -1,0 +1,34 @@
+{% extends 'home/ex.html' %}
+{% load static %}
+{% block body %}
+
+<script type="text/javascript" src="{% static 'scripts/home/home-functions.js' %}"></script>
+
+
+
+<br>
+
+
+<div class="posts-container" data-counter="10" style="width: 100%;">
+	{% with type=2 %}
+{% include 'fragments/snippets/post-upload.html' %}
+{% endwith %}
+<br>
+		{% if posts %}
+		{% for post in posts %}
+
+
+			{% include 'special/post.html' %}
+
+
+		{% endfor %}
+		{% else %}
+		
+		<div style="text-align: center;">
+
+			<h1>Add more friends and join groups or pages to see content</h1>
+		</div>
+
+		{% endif %}
+</div>
+{% endblock %}

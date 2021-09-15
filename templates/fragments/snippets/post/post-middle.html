@@ -1,0 +1,115 @@
+			<div class="post-reactions-container">
+				<div class="post-reacts-container" id="post-{{post.pk}}-react-container">
+					<div class="post-react-container">
+						<button class="post-react-button react" onclick="PostReact( 'like' , '{{post.pk}}');">
+							<i class="far fa-thumbs-up react"></i>			
+						</button>
+					</div>
+					<div>
+						<button class="post-react-button react" onclick="PostReact('love' , '{{post.pk}}');">
+							<i class="fas fa-heart react"></i>			
+						</button>
+					</div>
+					<div>
+						<button class="post-react-button react" onclick="PostReact('haha' , '{{post.pk}}');">
+							<i class="fas fa-smile react"></i>			
+						</button>
+					</div>
+					<div>
+						<button class="post-react-button react" onclick="PostReact('sad' , '{{post.pk}}');">
+							<i class="fas fa-frown react"></i>			
+						</button>
+					</div>
+					<div>
+						<button class="post-react-button react" onclick="PostReact('wow' , '{{post.pk}}');">
+							<i class="fas fa-surprise react"></i>			
+						</button>
+					</div>
+					<div>
+						<button class="post-react-button react" onclick="PostReact('angry' , '{{post.pk}}');">
+							<i class="fas fa-angry react"></i>			
+						</button>
+					</div>
+				</div>
+				<button class="post-action-button" id="post-{{post.pk}}-choosen-react-button" onmousemove="showReactsBox(this, '{{post.pk}}')" 
+
+				{% if request.user in post.likes.all or request.user in post.love.all or request.user in post.haha.all or request.user in post.sad.all or request.user in post.wow.all or request.user in post.angry.all %}
+
+				onclick="RemovePostReact('{{post.pk}}');"
+
+				{% else %}
+				onclick="PostReact('like','{{post.pk}}');"
+				{% endif %}
+				>
+					<i
+
+					{% if request.user in post.likes.all %}
+					
+					 class="fas fa-thumbs-up react" 
+
+					{% elif request.user in post.love.all %}
+
+					class="fas fa-heart react" 
+
+					{% elif request.user in post.haha.all %}
+
+					class="fas fa-smile react" 
+
+					{% elif request.user in post.sad.all %}
+
+					class="fas fa-frown react" 
+
+					{% elif request.user in post.wow.all %}
+
+					class="fas fa-surprise react" 
+
+					{% elif request.user in post.angry.all %}
+
+					class="fas fa-angry react" 
+
+					{% else %}
+
+					class="far fa-thumbs-up react" 
+
+					{% endif %}
+
+					 id="post-{{post.pk}}-react-icon"></i>
+					&nbsp
+					<b id="post-{{post.pk}}-react-button">
+					{{post.reacts_count}} 				
+					</b>
+				</button>
+			</div> 
+			<div>
+				<button class="post-action-button" data-count = "0" onclick="ShowComments('{{post.pk}}', this)">
+					<i class="far fa-comment"></i>
+					&nbsp
+					{% if post.comments.all.count == 1 %}
+					1 Comment
+					{% else %}
+					{{post.comments.all.count}} Comments
+					{% endif %}
+				</button>
+			</div>
+			<div>
+				<button class="post-action-button" onclick="shareModal({{post.pk}})">
+					<i id="post-share-icon-{{post.pk}}" class="
+					{% if request.user in post.shared.all %}
+					fas
+					{% else %}
+
+					far
+					
+					{% endif %}
+					 fa-share"></i>
+					
+					&nbsp
+					<bdo id="post-{{post.pk}}-share-count">
+					{% if post.shared_post.all.count == 1 %}
+					1 Share
+					{% else %}
+					{{post.shared_post.all.count}} Shares
+					{% endif %}
+					</bdo>
+				</button>
+			</div>

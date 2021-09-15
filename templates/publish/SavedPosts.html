@@ -1,0 +1,9 @@
+{% extends 'home/ex.html' %}
+
+{% block body %}
+<div class="page-root">
+	{% for post in request.user.saved_posts.all %}
+		{% include 'special/posts.html' %}
+	{% endfor %}
+</div>
+{% endblock %}

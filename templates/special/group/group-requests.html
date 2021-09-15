@@ -1,0 +1,15 @@
+{% extends 'home/ex.html' %}
+{% block body %}{% load static %}
+	<script type="text/javascript" src="{% static 'group/requestScript.js' %}"></script>
+	<div class="container" style=" border: 2px solid black; margin: auto; width: 50%; padding: 1%;">
+		<div id="requests-container">
+			{% if group.group_members_waiting.all %}
+			{% for member in group.group_members_waiting.all|slice:":10" %}
+				{% include 'fragments/group/groupRequest.html' %}
+			{% endfor %}
+			{% else %}
+			<h1 style='text-align: center;'>No requests</h1>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}

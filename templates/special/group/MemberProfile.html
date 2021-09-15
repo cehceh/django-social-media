@@ -1,0 +1,4 @@
+{% include 'special/profile.html' %}
+<script type="text/javascript">
+	document.getElementById('userHref').href = "{% url 'profile' user.pk %}"
+</script>

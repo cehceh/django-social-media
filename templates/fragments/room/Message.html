@@ -1,0 +1,43 @@
+{% load chat_tags %}
+<div id="message-{{message.pk}}" class="message-and-media {% if message.sender == request.user %} mine {% else %} not-mine {% endif %}
+	{% if message.is_seen == True %} seen {% else %} not-seen {% endif %}
+">
+		<div class="message-container" style=" display: inline-flex;">
+			<div>
+				{% if message.sender != request.user %}
+				<img src="{{message.sender.pic.url}}" style="width: 40px; height: 40px; border-radius: 50%;">
+				{% endif %}
+			</div>
+		
+		{% if message.record %}
+
+		<audio id="message-{{message.pk}}-record" controls="controls">
+			<source src="{{message.record.url}}" type="audio/ogg">
+		</audio>
+
+		{% else %}
+		<div class="message-content-container" style=" margin-right: 10px;">
+			
+			<p>{{message.content}}</p>
+		</div>
+
+		{% endif %}{% if message.sender == request.user %}
+				<button onclick="DeleteMessageTrigger('{{message.pk}}');" class="delete-button" style=" height: 10px; margin-top: 13%;"> &nbsp</button>
+			{% endif %}
+		<br>
+		
+		</div>
+
+
+		{% if message.messageMedia.all %}<hr>
+		<div>
+		{% for file in message.messageMedia.all %}
+		{% if file.media|is_img == True %}
+		<img width="300px" height="300px" src="{{file.media.url}}">
+		{% else %}
+		<video src="{{file.media.url}}" controls="controls" width="200px" height="200px"></video>
+		{% endif %}
+		{% endfor %}
+	</div>
+		{% endif %}
+	</div>

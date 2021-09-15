@@ -1,0 +1,107 @@
+{% extends 'home/ex.html' %}
+
+{% block body %}
+
+<h1>
+	what was searched for: 
+	<mark>
+	{{searched}}
+</mark>
+</h1>
+
+{% if searched %}
+
+{% for post in posts %}
+<div class="container" style=" font-size: 20px;">
+{% include 'special/posts.html' %}
+</div>
+
+{% endfor %}
+
+{% if users %}
+{% for user in users %}
+
+<h1>
+	Users:
+</h1>
+
+<div class="container">
+	<div>
+		<a href="{% url 'modify-search' search.pk 1 1 %}">
+			{% for word in user.full_name.split %}
+
+			{% if word in searched %}
+
+			<mark>{{word}}</mark>
+
+			{% else %}
+
+			{{word}}
+
+			{% endif %}
+			{% endfor %}
+		</a>
+		<img src="{{user.pic.url}}" width="100px" height="100px" style=" border-radius: 5px;">
+	</div>
+</div>
+
+{% endfor %}
+{% endif %}
+
+{% if pages %}
+{% for page in pages %}
+<h1>Pages</h1>
+<div class="container">
+	<div>
+		<a href="{% url 'modify-search' search.pk 2 1 %}">
+			{% for word in page.page_name.split %}
+
+			{% if word in searched %}
+
+			<mark>{{word}}</mark>
+
+			{% else %}
+
+			{{word}}
+
+			{% endif %}
+			{% endfor %}
+		</a>
+		<img src="{{page.page_photo.url}}" width="100px" height="100px" style=" border-radius: 5px;">
+	</div>
+</div>
+
+{% endfor %}
+{% endif %}
+
+{% if groups %}
+{% for group in groups %}
+<h1>Group</h1>
+<div class="container">
+	<div>
+		<a href="{% url 'modify-search' search.pk 3 1 %}">
+			{% for word in group.group_name.split %}
+
+			{% if word in searched %}
+
+			<mark>{{word}}</mark>
+
+			{% else %}
+
+			{{word}}
+
+			{% endif %}
+			{% endfor %}
+		</a>
+		<img src="{{group.group_cover_photo.url}}" width="100px" height="100px" style=" border-radius: 5px;">
+	</div>
+</div>
+
+{% endfor %}
+{% endif %}
+
+
+{% else %}
+No search!
+{% endif %}
+{% endblock %}

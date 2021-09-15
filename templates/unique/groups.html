@@ -1,0 +1,31 @@
+{% extends 'home/ex.html' %}
+{% block body %}
+<div style=" margin: auto; display: block; width: fit-content; margin-top: 2.5%;">
+	<div style="float: right;">
+		<a href="{% url 'create-group' %}">
+			<button style="padding: 10px; background-color: rgba(0, 20, 200, 0.7); border-radius: 5px; font-size: 15px; color: white; outline: none; border:transparent;">+ Create</button>
+		</a>
+	</div>
+	<div style=" display: grid; width: 100%; overflow-y: auto;">
+{% for group in request.user.groups.all %}
+	<br><div style=" display: inline-flex; width: 100%;">
+		<div style=" display: inline-flex; width: 100%;">
+			<div>
+				<img src="{{group.group_cover_photo.url}}" style=" width: 100px; width: 100px; border-radius: 25%;">
+			</div>
+			<div style="margin-left: 2%; margin-top: auto; margin-bottom: auto;">
+				<a href="{% url 'group' group.pk %}">
+					{{group.group_name}}
+				</a>
+			</div>
+		</div>
+		<div style=" margin-top: auto; margin-bottom: auto;">
+			<button onclick=" {% if not request.user == group.group_admin %} leaveGroup('{{group.pk}}'); {% else %} leaveGroupTrigger('{{group.pk}}') {% endif %}">
+				{% if not request.user == group.group_admin %} Leave {% else %} Delete {% endif %} Group 
+			</button>
+		</div>
+	</div><br>
+{% endfor %}
+	</div>
+</div>
+{% endblock %}

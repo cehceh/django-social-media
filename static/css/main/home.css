@@ -1,0 +1,289 @@
+hr {
+	margin: 5px;
+}
+
+.post-container{
+	z-index: 1;
+	border-radius: 10px;
+	padding: 10px;
+	width:75%;
+	margin: 0 auto;
+	background-color: #4b6ba0;
+}
+
+
+.post-top-actions-and-info-container .post-info{
+	display: flex;
+}
+
+.post-top-actions-and-info-container .post-info div{
+	display: inline-block;
+	width: 100%;
+}
+
+.name-and-date{
+	align-content: center;
+	margin-left: 5px;
+}
+
+.post-top-actions-and-info-container .post-info div a, b, small{
+	color: white;
+}
+
+.post-top-actions-and-trigger-container {
+	right: 0;
+	display: inline-block;
+}
+
+.post-top-actions-and-trigger-container .post-top-actions-trigger-container button{
+	margin: 0 auto;
+	display: block;
+	background-color: transparent;
+	color: white;
+
+}
+
+.post-top-actions-and-info-container .post-top-actions-and-trigger-container .post-top-actions-trigger-container {
+	float: right;
+	width: 100%;
+	margin-right: 0;
+	display: inline-block;
+}
+
+.post-top-container .post-top-actions-and-info-container{
+	width: 100%;
+	display: inline-flex;
+
+}
+
+.post-top-actions-trigger-container button {
+	padding: 3px;
+	width: 50px;
+	height: 50px;
+	border-radius: 90%;
+	transition: 0.2s;
+	border: none;
+	outline: none;
+	font-size: 15px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.post-top-actions-container {
+	position: absolute;
+	margin-left: -25px;
+	margin-top: 5px;
+	width: 100px;
+}
+.post-top-actions-container div{
+	margin-top: 5px;
+}
+
+
+.post-top-actions-trigger-container button:hover {
+	background-color: #transparent;
+	text-align: center;
+	line-height: 0;
+	font-size: 20px;
+}
+.post-container .post-top-container .post-top-actions-and-info-container .post-info .post-author-img-container{
+	width: 50px;
+}
+
+.post-top-container img{
+	width: 50px;
+	height: 50px;
+	border-radius: 25%;
+}
+
+.post-content-container{
+	color: white;
+	padding: 10px;
+	font-size: 25px;
+}
+
+.post-content-container p{
+	color: white;
+	padding: 10px;
+	font-size: 25px;
+}
+
+
+.above-post-content-container{
+}
+
+.post-container .post-top-container .above-post-content-container {
+	display: flex;
+}
+
+
+.post-media-container {
+	width: 100%;
+}
+
+.post-media-container div{
+	width: 100%;
+	display: flex;
+}
+
+.post-media-container img{
+	border-radius: 5px;
+	min-width: 100%;
+	min-height: 500px;
+	cursor: pointer;
+}
+
+.post-media-container video{
+	border-radius: 5px;
+	min-width: 100%;
+	min-height: 500px;
+}
+
+.indicators-container-container{
+
+	padding: 5px;
+
+
+}
+
+.indicators-container-container .indicators-container {
+	margin: 2px auto;
+	width: fit-content;
+	padding: 5px;
+	border-radius: 5px;
+}
+.indicators-container .indicator{
+	margin: 5px auto;
+	margin-right: 10px;
+	height: 25px;
+	width: 25px;
+	background-color: #bbb;
+	border-radius: 50%;
+	display: inline-block;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.indicators-container .indicator:hover{
+	background-color: white;
+}
+
+.post-middle{
+	display: flex;
+	padding: 5px;
+	border-radius: 5px;
+	background-color: transparent;
+}
+
+.post-middle div{
+	margin: 5px auto;
+}
+
+.post-middle div .post-action-button {
+	margin: 5px auto;
+	padding: 5px;
+	border-radius: 5px;
+	outline: none;
+	text-align: center;
+	width: calc(100/3) ;
+	background-color: transparent;
+	color: white;
+	border-color: transparent;
+	font-size: 20px;
+	transition: 0.3s;
+}
+
+
+.post-middle div .post-action-button:hover {
+	background-color: #24275c;
+	color: white;
+}
+
+.post-middle div .post-action-button i {
+	font-size: 25px;
+}
+
+
+.action-button {
+	border-radius: 5px;
+	padding: 5px;
+	font-weight: bold;
+	font-size: 15px;
+	cursor: pointer;
+	font-family: arial, sans-serif;
+	outline: none;
+	border-color: transparent;
+	width: 100px;
+	margin: 0 auto;
+}
+
+
+.action-button:hover {
+	background-color: grey;
+	color: white;
+}
+
+
+
+
+
+
+.post-middle .post-reacts-container{
+	display: none;
+	position: absolute;
+	margin-top: -6%;
+	background-color: white;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+.post-middle .post-reacts-container .react:not(:first-child){
+	margin-left: 25px;
+}
+
+.post-middle .post-reacts-container .react{
+	margin-left: 5px;
+	margin-top: -0px;
+	cursor: pointer;
+	font-size: 35px;
+	background-color: transparent;
+	outline: none;
+	border-color: transparent;
+}
+
+.fa-thumbs-up {
+	color: darkblue;
+}
+
+.post-middle .post-reacts-container .post-react-container .post-react-button .react:hover {
+	font-size: 75px;
+}
+
+.fa-heart {
+	color: red;
+}
+
+.fa-smile{
+	color: red;
+}
+
+.fa-surprise {
+	color: red;
+}
+
+.fa-frown {
+	color: red;
+}
+
+.fa-angry {
+	color: red;
+}
+
+.files-caption {
+	color: white;
+	font-size: 15px;
+}
+
+.far, .fas, .fa{
+	color: red;
+}

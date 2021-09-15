@@ -1,0 +1,10 @@
+<div style="text-align: center; " id="uploading-form" class=" container">
+	<form method="POST" action="javascript:void(0);" onsubmit="postUpload(this, '{{group.pk}}', '{{type}}');" enctype="multipart/form-data">
+		{% csrf_token %}
+		<input type="text" name="content" id="post-content-input">
+		<input type="file" style="display: none;" name="records" id="id_record">
+		<button type="button" id="recorder" onclick="Record()" class="not-active">Recorder</button>
+		<input type="file" name="files" multiple id="post-files-input" onchange="ReveiwPost(this);">
+		<button class="submit">Post</button>
+	</form>
+</div>

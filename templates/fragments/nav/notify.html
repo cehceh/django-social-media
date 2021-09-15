@@ -1,0 +1,15 @@
+<li id="notify-{{notify.id}}" class="notification-container"><a href="#">
+              	<div class="notify-container">
+              		<div class="request-sender-img-container">
+              		<img src="{{notify.sender.pic.url}}" >  <small style=" float: right;">{{notify.time}}</small></div> <div style=" margin-left: 5px; word-wrap: break-word;">{{ notify.text_preview|truncatechars:100 }}
+              	</div></div>
+              
+              </a>
+              {% if notify.notifications_type == 12 %}
+              <div class="request-options">
+                  <div class="request-option-container"><button onclick="notifyAccepted('{{notify.pk}}')" class="agree">Accept</button></div>
+                  <div class="request-option-container"><button  onclick="notifyDenied('{{notify.pk}}')"class="alert">Deny</button></div>
+                </div>
+              {% endif %}
+            </li>
+              

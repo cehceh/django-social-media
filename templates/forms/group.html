@@ -1,0 +1,25 @@
+{% extends 'home/ex.html' %}
+{% block body %}
+
+<div class="modal" style=" display: block;">
+	<div class="container modal-content">
+		<span class="close">
+			<a href="{% url 'user-groups' %}">&times</a></span>
+		<form method="POST" action="{% url 'create-group' %}" enctype="multipart/form-data">
+			{% csrf_token %}
+			{% for field in form %}
+			<div>
+				<mark>{{field.error}}</mark>
+			</div>
+			<div>
+				<b style=" color: black;">{{field.label}}:</b>
+				<div style="margin-left: 5%;"> <br> {{field}}</div>
+			</div><br>
+			{% endfor %}
+			<div style="margin: auto; width: fit-content;">
+				<button style="padding: 10px; background-color: rgba(0, 20, 200, 0.7); border-radius: 5px; font-size: 15px; color: white; outline: none; border:transparent;">Create</button>
+		</div>
+		</form>
+	</div>
+</div>
+{% endblock %}

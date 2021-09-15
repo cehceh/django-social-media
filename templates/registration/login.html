@@ -1,0 +1,94 @@
+{% load static %}{% load socialaccount %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<script type="text/javascript" src="{% static 'auth/scripts.js' %}"></script>
+	<script type="text/javascript" src="{% static 'jquery.js' %}"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'auth/style.css' %}">
+	<link rel="shortcut icon" href="#">
+
+</head>
+<body>
+
+<form method="POST" action="{% url 'login' %}">
+	{% csrf_token %}
+	{{login}}
+	<button>login</button>
+</form>
+<br>
+<div class="social-container">
+
+				
+				<a
+				  href= "#">
+				  <img src="{% static 'images/icons/facebook.jpg' %}" width="50px" height="50px">
+				</a>
+				<a href="{% provider_login_url 'google' %}">
+					<img src="{% static 'images/icons/google.jpg' %}" width="50px" height="50px">
+				</a>
+				<img src="{% static 'images/icons/twitter.jpg' %}" width="50px" height="50px">
+				<a href="#">
+				<img src="{% static 'images/icons/git-hub.jpg' %}" width="50px" height="50px">
+				</a>
+			</div>
+<br>
+<div style=" display: flex;">
+	<div style=" width: 50%;">
+		<form method="POST" action="{% url 'signup' %}" id="signupForm">
+			{% csrf_token %}
+			{% for field in signup %}
+			<mark class="alert">
+			{{field.error}}</mark>
+			<div>
+				{{field}}
+			</div>
+			<br>
+			{% endfor %}
+			<button form="signupForm">SignUp</button>
+		</form>
+	</div>
+	<div style=" width: 50%; margin-right: 0;">
+		{% for user in users %}
+			<div class="modal">
+				<div class="modal-content">
+					<span class="close" id="close">&times;</span>
+					<div class="modal-alert">
+						<div>
+						<p>
+							Your email or password is incorrect
+						</p>
+					</div>
+					</div>
+					<img src="#">
+					<form method="POST" action="javascript:void(0);" id="login-modal-{{forloop.counter}}-form" onsubmit="loginFun('{{forloop.counter}}');">
+						{% csrf_token %}
+						{% for field in login %}
+							{{field.label}}
+							{{field}}
+							<br><br>
+						{% endfor %}
+						<button>submit</button>
+					</form>
+
+				</div>
+
+			</div>
+			<div style=" display: block; text-align: center;" onclick="loginPopUp(this, '{{forloop.counter}}', '{{user.email}}' )">
+				
+				<img src = {% if user.pic %} "{{user.pic.url}}" {% else %} "{% static 'fixed/profile.jpg' %}"  {% endif %}>
+				
+				<br>
+				<b>{{user.full_name}}</b>
+			</div>
+			{% if forloop.counter|divisibleby:3 %}
+		</div>
+		<div style=" display: block; text-align: center;">
+			{% endif %}
+		{% endfor %}
+	</div>
+</div>
+</body>
+</html>

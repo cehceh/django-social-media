@@ -1,0 +1,59 @@
+{% load tags %}
+{% if post.post_file.all %}
+			<div class="post-media-container">
+				{% with post.post_file.all.first as file %}
+				<div id="post-{{post.pk}}-media-display">
+					{% if file.media|videoEx == True %}
+					<img src="{{file.media.url}}" onclick="DisplayFullImg(this);">
+					{% elif file.media %}
+					<video src="{{file.media.url}}" controls></video>
+					{% else %}
+					<audio controls>
+						<source src="{{file.record.url}}" type="audio/ogg">
+					</audio>
+						
+				{% endif %}
+						
+					
+				</div>
+
+				
+				
+				<p class='files-caption' id="post-{{post.pk}}-files-caption">
+					{% if file.caption %}
+					<br>
+					{% if file.caption|length > 150 %}
+						{{file.caption|truncatechars:150}} <small style="cursor: pointer;" onclick="this.innerHTML = '{{file.caption}}';">Read more</small>
+					{% else %}
+
+						{{file.caption}}
+
+					{% endif %}<br>
+					{% endif %}
+				</p>
+				
+				
+				{% endwith %}
+
+				<div class="indicators-container-container">
+					<div class="indicators-container">
+						{% for file in post.post_file.all %}
+						<div  class="indicator post-{{post.pk}}-indicators" 
+						{% if forloop.first %}
+
+						style="background-color: white;"
+
+						{% endif %} 
+
+						{% if file.media|videoEx == True %}
+						onclick="postImagesDisplay('{{post.pk}}', '{{file.media.url}}', '{{forloop.counter}}', '{{file.caption}}')"
+						{% else %}
+						onclick="postVideosDisplay('{{post.pk}}', '{{file.media.url}}', '{{forloop.counter}}', '{{file.caption}}')"
+						{% endif %}
+
+						></div>&nbsp
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			{% endif %}

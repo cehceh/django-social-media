@@ -1,0 +1,126 @@
+{% extends 'special/group/Groupex.html' %}
+{% load static %}
+{% block body %}
+
+<script type="text/javascript" src="{% static 'group/group.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'group/group.css' %}">
+
+<div class="posts-container" style=" width: 85%; margin-top: -2.4%;">
+<div class="group-fixed-options" style="margin-top: 0.9%;">
+	<div>
+		<a href="{% url 'group-fixed-posts' group.pk %}">
+			<button>
+				Fixed posts
+			</button>
+		</a>
+	</div>
+	<div>
+		<a href="{% url 'group-rules' group.pk %}">
+			<button>
+				Group rules
+			</button>
+		</a>
+	</div>
+	<div>
+		<a href="{% url 'group-members' group.pk %}">
+			<button>
+				Group members
+			</button>
+		</a>
+	</div>
+			
+	<div>
+		<form action="javascript:void(0);">
+			 {% csrf_token %}
+			<input type="search" name="group_search" placeholder="Search in group?">
+		</form>
+	</div>
+			
+	<div>
+		<form method="POST" action="{% url 'leave-group' group.pk %}">
+					
+			<a href="#">
+				<button class="alert">
+					{% if request.user != group.group_Admin %}
+						Delete group
+					{% else %}
+						Leave group
+					{% endif %}
+				</button>
+			</a>
+		</form>
+	</div>
+</div>
+
+
+<div style=" margin-top: 10px;">
+	<div>
+				
+		<div >
+			<div>
+				<img src="{{group.group_cover_photo.url}}" onclick="DisplayFullImg(this);" style=" z-index: -1;" width="100%" height="300px">
+			</div>
+			<div class="group-name-container" style="margin-top: -10%; padding: 5px; position: absolute;">
+				<h1 style=" color: white">{{group.group_name|title}}</h1>
+			</div>
+
+		{% if request.user not in group.group_members.all or request.user in group.group_members_waiting.all %}
+		<div style=" width: 300px; margin: auto;">
+			<form style="width: 300px;" action="{% url 'group-request' group.pk %}" action="javascript:void(0);" onsubmit="GroupRequest()">
+				<button id="Join-OR-Cancel-Button" style=" width: 300px; padding: 10px; font-size: 15px; background-color: #3c3d4e; color: white; outline:none; border: transparent; border-radius: 5px; position: absolute; margin-top: -5%; cursor: pointer;">
+				{% if request.user not in group.group_members.all %}
+				Join
+
+				{% else %}
+
+				Cancel Request
+				{% endif %}
+
+			</button>
+			</form>
+		</div>
+
+	</div>
+
+		{% else %}
+
+
+		<div>
+<br>
+{%  with type=1 %}
+{% include 'fragments/snippets/post-upload.html' %}
+{% endwith %}
+<br>
+			{% if not group.post_group.all %}
+
+			<div style="text-align: center;">
+		<h1>No posts to display.</h1>
+	</div>
+
+			{% else %}
+
+
+			{% for post in group.post_group.all %}
+<div>
+		{% with post=post %}
+	{% if post.share %}
+
+		{% include 'special/sharedPost.html' %}
+
+	{% else %}
+
+		{% include 'special/post.html' %}
+
+	{% endif %}
+{% endwith %}
+			{% endfor %}
+			{% endif %}
+		</div>
+
+
+
+		{% endif %}
+
+</div>
+</div></div></div>
+{% endblock %}

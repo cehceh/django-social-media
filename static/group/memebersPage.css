@@ -1,0 +1,61 @@
+.root{
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+}
+.search-container {
+	margin: auto;
+	width: fit-content;
+}
+.search-container *{
+	margin: auto;
+	align-content: center;
+}
+
+.search-container input {
+	padding: 5px;
+	font-size: 15px;
+}
+.members-container {
+	width: fit-content;
+	margin: auto;
+}
+
+.info {
+	width: fit-content;
+	margin: 5px;
+	background-color: dimgray;
+	text-align: center;
+	padding: 15px;
+	display: inline-flex;
+}
+.info *{
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.info a{
+	color: white;
+	font-weight: lighter;
+	margin-left: 10px;
+}
+
+
+
+.description{
+	background-color: firebrick;
+	color: white;
+	padding: 15px;
+	font-size: 20px;
+	width: inherit;
+
+}
+
+.members-div-container{
+	display: grid;
+	width: inherit;
+}
+
+.members-div-container div{
+	width: fit-content;
+}

@@ -1,0 +1,65 @@
+<a class="side-message-anchor"
+
+			{% if message.sender != request.user %} id="side-message-{{message.sender.pk}}-container" {% else %} id="side-message-{{message.receiver.pk}}-container"  {% endif %} 
+
+			 {% if message.sender != request.user %} href="  {% url 'messages'  message.sender.pk %} " {% else %} href="{% url 'messages'  message.receiver.pk %}"  {% endif %} %}>
+				<div 
+				{% if message.sender.pk == partner.pk or message.receiver.pk == partner.pk  %}
+					class="active-side-message" 
+				{% else %}class="side-message-container"{%endif%}>
+					{% if message.sender != request.user %}
+					<div style=" display: flex;">
+						<div>
+							<img src="{{message.sender.pic.url}}" width="50px" height="50px" style=" border-radius: 50%;">
+						</div>
+
+						<div>
+							<div>
+								<b class="sender-name">
+									{% if message.sender == request.user %}
+									You to {{message.receiver.full_name}}:
+									{% else %}
+								{{message.sender.full_name}}: {% endif %}</b>
+							</div>
+							<div>
+								<p>
+									<small>
+								{% if message.sender == request.user %} You: {{message.content}}.{% else %} {{message.sender.first_name.title}}: {{message.content}}.{% endif %} </small>
+								</p>
+								<small>
+									{{message.date}}
+								</small>
+							</div>
+						</div>
+
+					</div>
+						
+					{% else %}
+					<div style=" display: flex;">
+						<div>
+							<img src="{{message.receiver.pic.url}}" width="50px" height="50px" style=" border-radius: 50%;">
+						</div>
+						<div>
+							<div style=" display: inline-flex;">
+							<b class="sender-name">{% if message.sender == request.user %}
+									You to {{message.receiver.full_name}}:
+									{% else %}
+								{{message.sender.full_name}}: {% endif %}</b>
+							</div>
+							<div>
+
+								<p>
+									{{message.content}}
+								</p>
+
+								<small>
+									{{message.date}}
+								</small>
+
+							</div>
+						</div>
+					</div>
+					
+					{% endif %}
+				</div>
+			</a>

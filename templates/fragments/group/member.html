@@ -1,0 +1,27 @@
+<div class="info" style=" width: fit-content;">
+	<div>
+		<a href="{% url 'GroupMemberProfile' group.pk member.pk %}">
+			<img src="{{member.pic.url}}" style=" width: 50px; height: 50px; border-radius: 50%;">
+		</a>
+	</div>
+	<div style=" width: fit-content;">
+		<a href="{% url 'profile' member.pk %}">
+			{{member.full_name}}
+		</a>
+	</div>
+	{% if member != request.user %}
+	<div style="width: 100%; margin-right: 0%;">
+		<form action="#">
+			<button style=" padding: 5px; color: black; background-color: lightblue; outline: none; border: transparent; border-radius: 5px;">
+				{% if request.user in user.friends.all %}
+				Remove Friend
+				{% elif request.user in user.waiting.all %}
+				Cancel Request
+				{% else %}
+				Add Friend
+				{% endif %}
+			</button>
+		</form>
+	</div>
+	{% endif %}
+</div>

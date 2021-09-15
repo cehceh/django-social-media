@@ -1,0 +1,25 @@
+<div class="modal GroupProfileModal">
+	<div class="modal-content">
+		<div>
+			<div class="cover">
+				<img src="{{user.cover.url}}">
+			</div>
+			<div class="profile-pic">
+				<img src="{{user.pic.url}}">
+			</div>
+			<div>
+				<div style=" margin-left: auto; margin-right: auto;">
+					<a href="{% url 'profile' user.pk %}" style=" color: black; font-size: 20px;">
+						{{user.full_name}}
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="modal-posts-container">
+			{% for post in posts %}
+			{% include 'special/posts.html' %}
+			{% endfor %}
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="{% static 'fragments/group/scripts.js' %}"></script>

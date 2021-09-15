@@ -1,0 +1,81 @@
+{% extends 'home/ex.html' %}
+{% load static %}{% load chat_tags %}
+{% block title %} chatting with {{partner.full_name}} {% endblock %}
+{% block head %}
+	<link rel="shortcut icon" href="#">
+	<link rel="stylesheet" type="text/css" href="{% static 'chat/room.css' %}">
+	<script type="text/javascript" src="{% static 'scripts/jquery/jquery.js' %}"></script>
+
+{% endblock %}
+{% block body %}
+	<div class="room-container">
+		<div class="side-messages-container">
+
+			{% if side_messages  %}
+			{% for message in side_messages %}
+
+			{% include 'fragments/room/side_message.html' %}
+
+			<br>
+			{% endfor %}
+			{% endif %}
+		</div>
+		<div class="active-chat-container">
+			<h1 id="room-info">Chat with {{partner.full_name}}</h1>
+		<h2 id="status" {% if partner.is_online == True %} class="active" {% else %} class="offline" {% endif %} >{% if partner.is_active == True %}
+		active now
+		{% else %}
+		offline
+		{% endif %} <h3 id="typing-status"></h3> </h2>
+		<h3 id="typing"></h3>
+		<hr>
+		<div style=" width: 100%; height: 100vh; display: grid; grid-gap: 50px;">
+		<div id="chat-messages" class="chat-container">
+		{% for message in messages %}
+		{% if not forloop.first %}
+		<hr>	{% endif %}
+		{% include 'fragments/room/Message.html' %}
+		<br>
+		{% endfor %}
+			
+		</div>
+		<div class="message-form-content" style=" position: fixed; bottom: 0%; overflow: auto; border-top: 3px solid black; width: 100%; margin-left: -0.9%;"> 
+				<form action="javascript:void(0);" method="POST" id="sendMessageForm" onsubmit="sendMessage(this, '{{partner.pk}}')">
+					{% csrf_token %}
+					{{form}}
+					<div>
+						<button>Send</button>
+					</div>
+				</form>
+				<div style=" padding: 15px;">
+					
+					<br>
+					<div>
+						<button id="recorder" class="not-active">recorder</button>
+					</div>
+				</div>
+			</div></div>
+
+
+	</div>
+</div>
+		
+<style type="text/css">
+	input[name=record] {
+		display: none;
+	}
+
+	label{
+		display: none;
+	}
+
+</style>
+
+<script type="text/javascript" src="{% static 'chat/script.js' %}"></script>
+<script type="text/javascript">	
+	ChatSocket('{{request.user.pk}}','{{request.user.full_name}}', '{{partner.pk}}');
+	scrollToBottom();
+</script>
+{% endblock %}
+
+

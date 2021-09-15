@@ -1,0 +1,16 @@
+<li id="request-{{req.id}}" class="request-li" >
+              	<a href="{% url 'profile' req.id %}">
+                    <div style="display: inline-flex;">
+              		<div class="request-sender-img-container">
+              			<img src="{{req.pic.url}}" >
+              		</div>
+                    <div style=" margin-left: 5px;">
+              		{{req.full_name|title}} has sent you a friend request
+              	     </div>
+                 </div>
+                </a>
+              	<div class="request-options" style=" margin-top: -5%;">
+              		<div class="request-option-container"><button onclick="requestAccepted('{{req.pk}}')" class="agree" style=" height: 40px; width: 75px">Accept</button></div>
+              		<div class="request-option-container"><button style=" width: 75px; height: 40px;" onclick="requestDenied('{{req.pk}}')"class="alert">Deny</button></div>
+              	</div>
+              </li>

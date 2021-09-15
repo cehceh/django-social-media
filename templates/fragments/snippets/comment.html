@@ -1,0 +1,97 @@
+{% load tags %}
+<div style=" width: inherit; display: inline-flex;" id="comment-{{comment.pk}}">
+		<div>
+			<img src="{{comment.author.pic.url}}" style=" width: 50px; height: 50px; border-radius: 40%;">
+		</div>
+		<div style="display: grid; margin-left: 10px;">
+			<div>
+				<a href="javascript:void(0);">
+					{{comment.author.full_name}}
+				</a>
+				{% if group %}
+				{% if comment.author == group.group_admin or comment.author in group.group_sub_admin.all %}
+					<div style=" background-color: grey; text-align: center;">
+						<small>Group Admin</small>
+					</div>
+				{% endif %}
+				{% endif %}
+				{% if comment.author == comment.post.author %}
+				<div style="padding: 2px; background-color: grey; text-align: center; width: fit-content;">
+					<small>* content author</small>
+				</div>
+				{% endif %}
+			</div>
+			<div style="width: fit-content; margin-top: 2px; background-color: grey; color: white; border-radius: 5px; padding: 5px; padding-top: 0; padding-bottom: 0;">
+				<p style=" word-break: break-all;">
+					{% if comment.content|length > 150 %}
+						{{comment.content|truncatechars:150}}
+					{% else %}
+						{{comment.content}}
+					{% endif %}	 
+				</p>
+			</div>
+			{% if comment.media %}
+			<div style="margin-top: 5px;">
+			{{comment.media.url|mediaEx}}
+			</div>{% endif %}
+			<div class="comment-options" id="comment-{{comment.pk}}-options" style="margin-top: 5px; display: inline-flex;">
+				<div>
+					{{comment.reacts_count}} <button id="comment-{{comment.pk}}-choosen-react-button" onmousemove="showCommentReactsBox(this, '{{comment.pk}}')" style="background-color: transparent; border: transparent; outline: none;">
+
+						<i
+
+					{% if request.user in comment.likes.all %}
+					
+					 class="fas fa-thumbs-up react" 
+
+					{% elif request.user in comment.love.all %}
+
+					class="fas fa-heart react" 
+
+					{% elif request.user in comment.haha.all %}
+
+					class="fas fa-smile react" 
+
+					{% elif request.user in comment.sad.all %}
+
+					class="fas fa-frown react" 
+
+					{% elif request.user in comment.wow.all %}
+
+					class="fas fa-surprise react" 
+
+					{% elif request.user in comment.angry.all %}
+
+					class="fas fa-angry react" 
+
+					{% else %}
+
+					class="far fa-thumbs-up react" 
+
+					{% endif %}
+
+					 id="comment-{{comment.pk}}-react-icon"></i>
+
+					</button> 
+				</div> &nbsp
+				<div>
+					<button style="background-color: transparent; border: transparent; outline: none; cursor: pointer;" onclick="ShowReplyForm('{{comment.pk}}')">Reply</button>
+				</div> &nbsp
+				<div>
+					<small>{{comment.date}}</small>
+				</div>
+			</div>
+			{% if comment.replies.all %}
+			<div>
+				<button style="background-color: transparent; border: transparent; outline: none; cursor: pointer;">Click to show {{comment.replies.all.count}} replies</button>
+			</div>
+			{% endif %}
+			<div>
+					<form action="javascript:void(0);">
+						<input type="text" name="reply">
+						<button>Reply</button>
+					</form>
+			</div>
+			<div></div>
+		</div>
+	</div><br>
