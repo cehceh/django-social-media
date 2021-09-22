@@ -1,43 +1,26 @@
-{% load chat_tags %}
-<div id="message-{{message.pk}}" class="message-and-media {% if message.sender == request.user %} mine {% else %} not-mine {% endif %}
-	{% if message.is_seen == True %} seen {% else %} not-seen {% endif %}
-">
-		<div class="message-container" style=" display: inline-flex;">
-			<div>
-				{% if message.sender != request.user %}
-				<img src="{{message.sender.pic.url}}" style="width: 40px; height: 40px; border-radius: 50%;">
-				{% endif %}
-			</div>
-		
-		{% if message.record %}
+{% load tags %}
+<div id="message-{{message.id}}" class="{% if message.sender == request.user %}message-parent{% else %}message-parent-reverse {% endif %} ">
+                        <div style="color: blue; float: left; align-self: center;">
+                                <i class="far fa-check-circle unseen" title="تم الارسلال"></i>
+                                <i class="fas fa-check-circle seen" title="تمت المشاهدة"></i>
+                        </div>
+                        <div class="message" style="display: flex; flex-direction: column;align-items: flex-end;">
+                        	{% if message.reply %}
+                            <p class="div-reply-message">{{message.reply.content|truncatechars:30}}</p>{% endif %}
+                            <p title="تاريخ الارسال" class="actually-message">{{message.content}}</p>
+                            {% if message.media.all %}
+                            {% for m in message.media.all %}
+                            {{m|videoEx}}
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="message-options" style="align-self: center;">
+                            <i class="fas fa-ellipsis-h"></i> <!--التلت نقط اللى فوق بعض-->
+                        </div>
+                        <div class="decision scale-0 edit-reply-remove">
+                            <div>تعديل</div>
+                            <div class="reply">رد</div>
+                            <div class="remove" data-id="{{message.id}}">حذف</div>
+                        </div>
 
-		<audio id="message-{{message.pk}}-record" controls="controls">
-			<source src="{{message.record.url}}" type="audio/ogg">
-		</audio>
-
-		{% else %}
-		<div class="message-content-container" style=" margin-right: 10px;">
-			
-			<p>{{message.content}}</p>
-		</div>
-
-		{% endif %}{% if message.sender == request.user %}
-				<button onclick="DeleteMessageTrigger('{{message.pk}}');" class="delete-button" style=" height: 10px; margin-top: 13%;"> &nbsp</button>
-			{% endif %}
-		<br>
-		
-		</div>
-
-
-		{% if message.messageMedia.all %}<hr>
-		<div>
-		{% for file in message.messageMedia.all %}
-		{% if file.media|is_img == True %}
-		<img width="300px" height="300px" src="{{file.media.url}}">
-		{% else %}
-		<video src="{{file.media.url}}" controls="controls" width="200px" height="200px"></video>
-		{% endif %}
-		{% endfor %}
-	</div>
-		{% endif %}
-	</div>
+                    </div>

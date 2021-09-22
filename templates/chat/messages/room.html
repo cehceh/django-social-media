@@ -2,80 +2,152 @@
 {% load static %}{% load chat_tags %}
 {% block title %} chatting with {{partner.full_name}} {% endblock %}
 {% block head %}
+        <meta charset="UTF-8">
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 	<link rel="shortcut icon" href="#">
-	<link rel="stylesheet" type="text/css" href="{% static 'chat/room.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'chat/chatRoom.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'chat/all.min.css' %}">
 	<script type="text/javascript" src="{% static 'scripts/jquery/jquery.js' %}"></script>
 
 {% endblock %}
 {% block body %}
-	<div class="room-container">
-		<div class="side-messages-container">
 
-			{% if side_messages  %}
-			{% for message in side_messages %}
 
-			{% include 'fragments/room/side_message.html' %}
 
-			<br>
-			{% endfor %}
-			{% endif %}
+
+
+
+
+
+
+
+
+
+<div class="all" id="all">
+
+                <!-- بدايية الجزء العلوى -->
+            <div class="nav-chat" id="nav-chat">
+                <div class="head-icons">
+                    <div>
+                        <i class="fas fa-cog"></i>
+                        <i class="fas fa-video"></i>
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div>
+                        <h4>{{partner.name}}</h4>
+                        <span>
+                            <img src="{{partner.pic}}" alt="profile">
+                        </span>
+                        <div>
+                            <i class="fas fa-angle-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <!-- نهاية الجزء العلوى -->
+
+                <!-- بداية الرسايل -->
+            <div class="chat-message" id="chat-message">
+
+                <div style="width: 100%; height: 95%; overflow: auto;">
+
+                        <!-- Start Sending message -->
+                        {% for message in messages %}
+
+                        {% include 'fragments/room/Message.html' %}
+                        <!-- End Sending message -->
+
+                        <!-- Start Sending message -->
+                    
+                    {% endfor %}
+
+                        <!-- End Sending message -->
+
+
+                </div>
+
+            </div>
+                <!-- نهاية الرسايل -->
+
+                <!-- بداية الجزء السفلى -->
+            <div class="write-send" id="write-send">
+                <div class="bottom-icons">
+                    <div class="icons">
+                        <i class="far fa-paper-plane"></i> <!--زرالارسال-->
+                        <i class="fas fa-thumbs-up"></i> <!--زر اللايك-->
+
+                        <i class="fas fa-paperclip clip"></i> <!--المشبك-->
+
+                        <div class="clip-options">
+                            <i class="fas fa-smile"></i> <!--زر الايموجى-->
+                            <i class="fas fa-camera"></i> <!--زر الكاميرا-->
+                            <i class="fas fa-microphone"></i> <!--زر الميكروفون-->
+                        </div>
+                    </div>
+
+                    <div class = "inputs" style="flex-grow: 2; display: block;">
+                        <form method="POST" action="javasctip:void(0);">
+                            {% csrf_token %}
+                            {{form}}
+                        </form>
+                    </div>
+
+                     <div>
+                        <h4>GIF</h4>
+                        <div>
+                            <i class="fas fa-camera" style="color:black"></i> 
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+                <!-- نهاية الجزء السفلى -->
+
+                <!-- بداية الرد على الرسايل -->
+            <div class="replay-container">
+                <i class="fas fa-times cloth-replay-container"></i>
+                <div>
+                    <span>هنا الرسالة التى سيتم الرد عليها</span>
+                </div>
+                <div>
+                    <input type="text" name="" id="" placeholder="اكتب رد...">
+                </div>
+                <div>
+                    <!-- الايموشنات -->
+                    <i class="far fa-paper-plane send-replay" id="send-replay"></i> <!--زرالارسال-->
+                    <i class="fas fa-thumbs-up"></i> <!--زر اللايك-->
+                    <i class="fas fa-smile"></i> <!--زر الايموجى-->
+                    <i class="fas fa-camera"></i> <!--زر الكاميرا-->
+                    <i class="fas fa-microphone"></i> <!--زر الميكروفون-->
+                </div>
+            </div>
+                <!-- نهاية الرد على الرسايل -->
+        </div>
+
+
+		<div class="nav-bar">
+			<div class="cloth">
+				<i class="fas fa-times"></i>
+			</div>
+			<h1>الدردشات</h1>
+
+			<div class="chat-parent">
+				{% for message in side_messages %}
+				{% include 'fragments/room/side_message.html' %}
+                {% endfor %}
+			</div>
 		</div>
-		<div class="active-chat-container">
-			<h1 id="room-info">Chat with {{partner.full_name}}</h1>
-		<h2 id="status" {% if partner.is_online == True %} class="active" {% else %} class="offline" {% endif %} >{% if partner.is_active == True %}
-		active now
-		{% else %}
-		offline
-		{% endif %} <h3 id="typing-status"></h3> </h2>
-		<h3 id="typing"></h3>
-		<hr>
-		<div style=" width: 100%; height: 100vh; display: grid; grid-gap: 50px;">
-		<div id="chat-messages" class="chat-container">
-		{% for message in messages %}
-		{% if not forloop.first %}
-		<hr>	{% endif %}
-		{% include 'fragments/room/Message.html' %}
-		<br>
-		{% endfor %}
-			
-		</div>
-		<div class="message-form-content" style=" position: fixed; bottom: 0%; overflow: auto; border-top: 3px solid black; width: 100%; margin-left: -0.9%;"> 
-				<form action="javascript:void(0);" method="POST" id="sendMessageForm" onsubmit="sendMessage(this, '{{partner.pk}}')">
-					{% csrf_token %}
-					{{form}}
-					<div>
-						<button>Send</button>
-					</div>
-				</form>
-				<div style=" padding: 15px;">
-					
-					<br>
-					<div>
-						<button id="recorder" class="not-active">recorder</button>
-					</div>
-				</div>
-			</div></div>
 
-
-	</div>
-</div>
-		
-<style type="text/css">
-	input[name=record] {
-		display: none;
-	}
-
-	label{
-		display: none;
-	}
-
-</style>
 
 <script type="text/javascript" src="{% static 'chat/script.js' %}"></script>
-<script type="text/javascript">	
+<script type="text/javascript">
 	ChatSocket('{{request.user.pk}}','{{request.user.full_name}}', '{{partner.pk}}');
 	scrollToBottom();
 </script>
+<script src="{% static 'chat/main.js' %}"></script>
+
 {% endblock %}
-
-

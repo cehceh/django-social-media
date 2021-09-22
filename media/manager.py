@@ -6,12 +6,8 @@ class UserManager(BaseUserManager):
 
 	def _create_user(self, email,password, **extra_fields):
 			
-		if email:
-			email = self.normalize_email(email)
-		
-		else:
-			email = None
-
+		email = self.normalize_email(email)
+		print(email)
 		user = self.model(email=email, **extra_fields)
 		if password:
 

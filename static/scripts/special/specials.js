@@ -732,8 +732,9 @@ function shareModal(pk) {
 
 
 	var modal = document.createElement("div");
+	modal.id = "Post-share-modal-" + pk
 	modal.className = 'modal'
-	var span = document.getElementById("span");
+	var span = document.createElement("span");
 	span.className = 'close'
 
 	var content = document.createElement("div");
@@ -792,6 +793,7 @@ function PostShare(pk) {
 					document.getElementById("myModal").style.display = 'none';
 					document.getElementById('post-share-icon-' + pk).className = 'fas fa-share';
 					document.getElementById('post-' + pk + '-react-button').innerHTML = message.counts;
+					document.getElementById("Post-share-modal-" + pk).remove()
 			} else {
 				errorModal(message.data)
 			}

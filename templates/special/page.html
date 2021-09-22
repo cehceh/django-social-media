@@ -47,8 +47,8 @@
 			</div>
 			{% endif %}
 		</div>
-		<div class="modal-posts-container" style="margin-top: {% if not request.user == page.page_admin %} 5{% else %} 1{% endif %}%;">
-			{% for post in page.post_page.all %}
+		<div class="modal-posts-container" data-id = "{{page.id}}" data-counter="0" style="margin-top: {% if not request.user == page.page_admin %} 5{% else %} 1{% endif %}%;">
+			{% for post in page.post_page.all|slice:"10" %}
 			{% include 'special/post.html' %}
 			{% endfor %}
 		</div>
@@ -56,5 +56,6 @@
 </div><br>
 <script type="text/javascript" src="{% static 'fragments/group/scripts.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'profile/profile.css' %}">
+<script type="text/javascript" src="{% static 'page/page.js' %}"></script>
 
 {% endblock %}

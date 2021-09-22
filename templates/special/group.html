@@ -99,23 +99,16 @@
 
 			{% else %}
 
+<div class="group-posts-container" data-counter= "0" data-id = "{{group.pk}}">
+			{% for post in group.post_group.all|slice:"10" %}
 
-			{% for post in group.post_group.all %}
-<div>
-		{% with post=post %}
-	{% if post.share %}
-
-		{% include 'special/sharedPost.html' %}
-
-	{% else %}
 
 		{% include 'special/post.html' %}
 
-	{% endif %}
-{% endwith %}
 			{% endfor %}
+</div>
+
 			{% endif %}
-		</div>
 
 
 

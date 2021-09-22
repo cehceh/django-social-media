@@ -11,9 +11,11 @@ from django.views.generic import *
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, UpdateView
 from django.forms import inlineformset_factory
-from media.models import Notifications
+from media.models import Notifications, Group, Page
 from django.template.loader import render_to_string
 from django.http import HttpResponseNotFound
+from django.core.exceptions import PermissionDenied
+
 # Create your views here.
 @login_required
 def PostDetail(request, pk):
@@ -36,7 +38,7 @@ def CreatePost(request):
 				pre_caption = "img_caption_" + str(index)
 				caption = request.POST.get(pre_caption)
 
-				PostFiles.objects.create(post=post, media=file, caption=caption)
+				PostFiles.objects.create(post=post, media=file, content=caption)
 				
 				
 				print("created")
@@ -383,3 +385,27 @@ def ActivatePostNotify(request, pk):
 		return JsonResponse({"done": "done"})
 	except:
 		return JsonResponse({"error": "Whops something went wrong, or the object has been deleted."})
+
+@login_required
+def getGroupPosts(request):
+	if request.is_ajax():
+		pk = request.POST.get('pk')
+		counter = request.POST.get('counter')
+		group = Group.objects.filter(pk=pk)[0]
+		if not group:
+			raise HttpResponseNotFound()
+		posts = Post.objects.filter(group=group)[int(counter):][:10]
+		return JsonResponse([render_to_string('special/post.html', {'post':post}, request) for post in posts], safe=False)
+	return PermissionDenied()
+
+@login_required
+def getPagePosts(request):
+	if request.is_ajax():
+		pk = request.POST.get('pk')
+		counter = request.POST.get('counter')
+		page = Page.objects.filter(pk=pk)[0]
+		if not page:
+			raise HttpResponseNotFound()
+		posts = Post.objects.filter(page=page)[int(counter):][:10]
+		return JsonResponse([render_to_string('special/post.html', {'post':post}, request) for post in posts], safe=False)
+	return PermissionDenied()

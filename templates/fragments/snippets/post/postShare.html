@@ -8,7 +8,7 @@
 						<div class="post-info">
 							<div class="post-author-img-container">
 								<img {% if group and group == post.share.group %} onclick="getMemberProfile('{{post.share.author.pk}}', '{{group.pk}}')" {% endif %} src="{% if not post.share.page %}
-							{{post.share.author.pic.url}}
+							{{post.share.author.pic}}
 							{% else %}
 							{{post.share.page.page_photo.url}}
 							{% endif %}">
@@ -106,53 +106,52 @@
 				</div>
 				{% if post.share.post_file.all %}
 				<div class="post-media-container">
-					{% with post.share.post_file.all.first as file %}
-					<div id="shared-post-{{post.share.pk}}-media-display">
-						{% if file.media|videoEx == True  %}
-						<img src="{{file.media.url}}" onclick="DisplayFullImg(this);">
-						{% else %}
-						<video src="{{file.media.url}}" controls></video>
-							
-					{% endif %}
-							
-						
-					</div>
-					<p class='files-caption' id="shared-post-{{file.post.pk}}-files-caption">
-					{% if file.caption %}
-					<br>
-					{% if file.caption|length > 150 %}
-						{{file.caption|truncatechars:150}} <small style="cursor: pointer;" onclick="this.innerHTML = '{{file.caption}}';">Read more</small>
-					{% else %}
-
-						{{file.caption}}
-
-					{% endif %}<br>
-					{% endif %}
-				</p>
-					{% endwith %}
-
-					<div class="indicators-container-container">
-						<div class="indicators-container">
-							{% for file in post.share.post_file.all %}
-							<div  class="indicator shared-post-{{post.share.pk}}-indicators" 
-							{% if forloop.first %}
-
-							style="background-color: white;"
-
-							{% endif %} 
-
-							{% if file.media|videoEx == True  %}
-							onclick="sharedpostImagesDisplay('{{post.share.pk}}', '{{file.media.url}}', '{{forloop.counter}}', '{{file.caption}}')"
-
-							{% else %}
-							onclick="sharedpostVideosDisplay('{{post.share.pk}}', '{{file.media.url}}', '{{forloop.counter}}', '{{file.caption}}')"
-							{% endif %}
-
-							></div>&nbsp
-							{% endfor %}
-						</div>
-					</div>
-				</div>
+									{% with post.share.post_file.all.first as file %}
+									<div id="shared-post-{{post.share.pk}}-media-display">
+										{% if file.media|videoEx == True  %}
+										<video src="{{file.media.url}}" controls></video>
+										{% else %}
+										<img src="{{file.media.url}}" onclick="DisplayFullImg(this);">	
+									{% endif %}
+											
+										
+									</div>
+									<p class='files-caption' id="shared-post-{{file.post.pk}}-files-caption">
+									{% if file.caption %}
+									<br>
+									{% if file.caption|length > 150 %}
+										{{file.caption|truncatechars:150}} <small style="cursor: pointer;" onclick="this.innerHTML = '{{file.caption}}';">Read more</small>
+									{% else %}
+				
+										{{file.caption}}
+				
+									{% endif %}<br>
+									{% endif %}
+								</p>
+									{% endwith %}
+				
+									<div class="indicators-container-container">
+										<div class="indicators-container">
+											{% for file in post.share.post_file.all %}
+											<div  class="indicator shared-post-{{post.share.pk}}-indicators" 
+											{% if forloop.first %}
+				
+											style="background-color: white;"
+				
+											{% endif %} 
+				
+											{% if file.media|videoEx == True  %}
+											onclick="sharedpostImagesDisplay('{{post.share.pk}}', '{{file.media.url}}', '{{forloop.counter}}', '{{file.caption}}')"
+				
+											{% else %}
+											onclick="sharedpostVideosDisplay('{{post.share.pk}}', '{{file.media.url}}', '{{forloop.counter}}', '{{file.caption}}')"
+											{% endif %}
+				
+											></div>&nbsp
+											{% endfor %}
+										</div>
+									</div>
+								</div>
 				{% endif %}
 			</div></div>
 

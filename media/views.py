@@ -74,7 +74,6 @@ def loginView(request):
 				login(request, user)
 				return AddUserToCookies(request, user.id, 'home')
 			else:
-				print("not valid")
 				if request.is_ajax():
 					return JsonResponse({'failure': True})
 				return render(request, 'registration/login.html', {'login': loginForm, 'signup': signup, 'users': users})
@@ -495,3 +494,16 @@ def DenyGroupJoinReq(request):
 @login_required
 def UserFriendsPage(request):
 	return render(request, 'special/profile/friends.html')
+
+@login_required
+def InviteGroupMember(request):
+	if request.is_ajax() and request.method == 'POST':
+		userPK = request.POST.get('userPK')
+		groupPK = request.POST.get('groupPK')
+		group = Group.objects.get(pk=groupPK)
+		user = User.objects.get(pk=userPK)
+
+		Notifications.objects.create(receiver=user, sender=request.user, group=group, notifications_type=12, notifications_obj=5, text_preview = "{0} invited you to his group {1}".forms(request.user.full_name(), group.group_name))
+
+		return JsonResponse({'done': True})
+	return PermissionDenied()

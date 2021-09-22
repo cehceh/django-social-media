@@ -20,10 +20,11 @@ class Message(models.Model):
 	receiver 	= models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name='message_receiver')
 
 	content = models.CharField(null=True, blank=True, max_length=255)
-	record		= models.FileField(upload_to = MessageRecordStorage,)
+	record		= models.FileField(null=True, blank=True, upload_to = MessageRecordStorage,)
 	
 	date 		= models.DateTimeField(auto_now_add=True)
-
+	reply 		= models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='m_replies')
+	room 		= models.ForeignKey('AnonymousRoom', null=True, blank=True, on_delete=models.CASCADE, related_name='anonymous_messages')
 	is_seen		= models.BooleanField(default=False)
 
 	def __str__(self):
@@ -55,38 +56,6 @@ class AnonymousRoom(models.Model):
 
 	def delete(self):
 		self.delete()
-
-class AnonymousMessage(models.Model):
-	sender 		= models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE, related_name='anonymous_message_sender')
-
-	receiver 	= models.ForeignKey(AnonymousRoom, null=True, blank=True, on_delete=models.CASCADE, related_name='anonymous_message_receiver')
-
-	content 	= models.CharField(max_length=255)
-
-	date 		= models.DateTimeField(auto_now_add=True)
-
-	is_seen		= models.BooleanField(default=False)
-
-	is_anonymous = models.BooleanField(default=False)
-
-	def __str__(self):
-		return str("%s sent to %s"% (self.sender.full_name, self.receiver.full_name)).capitalize()
-
-	def delete(self):
-		self.delete()
-
-	def seen(self):
-		self.is_seen = True
-		self.save()		
-
-
-class AnonymousMessageMedia(models.Model):
-	message 	= models.ForeignKey(AnonymousMessage, null=True, blank=True, on_delete=models.CASCADE, related_name='anonymous_media')
-	media 		= models.FileField(upload_to  = AnonymousMessageMediaStorage)
-
-
-
-
 
 
 

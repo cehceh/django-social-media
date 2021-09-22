@@ -1,4 +1,5 @@
 function loginPopUp(div, counter, email) {
+	console.log("sb7")
 	img = div.getElementsByTagName('img')[0].src
 	modal = document.getElementsByClassName('modal')[counter-1]
 	modal.style.display = 'block';
@@ -12,6 +13,7 @@ function loginPopUp(div, counter, email) {
 
 	span = modal.getElementsByClassName('modal-content')[0].getElementsByClassName('close')[0]
 	span.onclick = function() {
+		console.log("closed")
 	  modal.style.display = "none";
 	}
 

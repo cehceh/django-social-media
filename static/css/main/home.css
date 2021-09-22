@@ -8,7 +8,7 @@ hr {
 	padding: 10px;
 	width:75%;
 	margin: 0 auto;
-	background-color: #4b6ba0;
+	background-color: rgba(50, 50, 50, 1.0);
 }
 
 
@@ -252,7 +252,7 @@ hr {
 }
 
 .fa-thumbs-up {
-	color: darkblue;
+	color: rgba(200, 200, 200, 0.7);
 }
 
 .post-middle .post-reacts-container .post-react-container .post-react-button .react:hover {

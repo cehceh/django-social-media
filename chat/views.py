@@ -39,8 +39,8 @@ def SendMessageView(request):
 			sender_m = render_to_string("fragments/room/Message.html", {'message': message} , request)
 			message_group_name1 = 'chat_%d' % int(request.user.pk + partner.pk)
 			async_to_sync(channel_layer.group_send)(
-		        message_group_name1,
-		        {'type': 'chat_message', 'message': sender_m})
+				message_group_name1,
+				{'type': 'chat_message', 'message': sender_m})
 			
 		
 			return JsonResponse({'done': True})
@@ -65,12 +65,14 @@ def MessageView(request, partner_id):
 	
 
 def DeleteMessage(request):
-	pk = request.POST.get('deleted')
-	message = get_object_or_404(Message, pk=pk)
-	if request.method == 'POST' and request.user == message.sender:
+	pk = request.DELETE.get('id')
+	message = Message.objects.filter(pk=pk)[0]
+	if not message:
+		return JsonResponse({'done': False})
+	if request.method == 'DELETE' and request.user == message.sender:
 		message.delete()
 
-		return JsonResponse({'message': False})
+		return JsonResponse({'done': True})
 	
 	else:
 		raise PermissionDenied()

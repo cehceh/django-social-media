@@ -6,7 +6,7 @@
 					<div class="post-info">
 						<div class="post-author-img-container">
 							<img src="{% if not post.page %}
-							{{post.author.pic.url}}
+							{{post.author.pic}}
 							{% else %}
 							{{post.page.page_photo.url}}
 							{% endif %}" {% if group %} onclick="getMemberProfile('{{post.author.pk}}', '{{group.pk}}')" {% endif %}>
@@ -15,8 +15,8 @@
 							<p>
 										{% if post.page and post.group and not group %}
 											<a href="#">{{post.page.page_name}}</a> <b> --> </b> <a href="#"> {{post.group.group_name}}</a>
-
-										{% elif post.page %}
+										{% endif %}
+										{% if post.page %}
 										<a href="{% url 'page' post.page.pk %}">{{post.page.page_name}}</a>
 
 										{% else %}

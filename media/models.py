@@ -53,8 +53,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 	BirthDate = DateTimeField(auto_now_add=False, blank=True, null=True)
 	gender = IntegerField(choices=gender_type, null=True)
 	bio 	= CharField(max_length=100, blank=True, null=True)
-	pic 	= ImageField(upload_to = get_profile_pic_path, null = True, blank = True, default='profiles/profile.jpg')
-	cover 	= ImageField(upload_to = get_profile_cover_path, null = True, blank = True, default='profiles/cover.jpg')
+	avatar 	= ImageField(upload_to = get_profile_pic_path, null = True, blank = True,)
+	cover_pic 	= ImageField(upload_to = get_profile_cover_path, null = True, blank = True,)
 	following = ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='user_following')
 	followers = ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='user_followers')
 	friends = ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='user_friends')
@@ -76,6 +76,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELD = []
 
+	def pic(self):
+		if not self.avatar:
+			return '/images/profiles/profile.jpg'
+		return self.avatar
+
+	def cover(self):
+		if not self.cover_pic:
+			return '/images/profiles/cover.jpg'
+		return self.cover_pic
 
 	def full_name(self):
 
@@ -84,6 +93,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 		return self.name.split()[0]
 
 	def __str__(self):
+		if not self.name:
+			self.name = self.email.split('@')[0]
 		return str(self.id) + ": " + self.full_name()
 
 class Group(Model):

@@ -11,46 +11,11 @@
 	<link rel="shortcut icon" href="#">
 
 </head>
-<body>
+<body style="background-color: rgba(0,0,100,0.4);">
 
-<form method="POST" action="{% url 'login' %}">
-	{% csrf_token %}
-	{{login}}
-	<button>login</button>
-</form>
-<br>
-<div class="social-container">
-
-				
-				<a
-				  href= "#">
-				  <img src="{% static 'images/icons/facebook.jpg' %}" width="50px" height="50px">
-				</a>
-				<a href="{% provider_login_url 'google' %}">
-					<img src="{% static 'images/icons/google.jpg' %}" width="50px" height="50px">
-				</a>
-				<img src="{% static 'images/icons/twitter.jpg' %}" width="50px" height="50px">
-				<a href="#">
-				<img src="{% static 'images/icons/git-hub.jpg' %}" width="50px" height="50px">
-				</a>
-			</div>
-<br>
-<div style=" display: flex;">
-	<div style=" width: 50%;">
-		<form method="POST" action="{% url 'signup' %}" id="signupForm">
-			{% csrf_token %}
-			{% for field in signup %}
-			<mark class="alert">
-			{{field.error}}</mark>
-			<div>
-				{{field}}
-			</div>
-			<br>
-			{% endfor %}
-			<button form="signupForm">SignUp</button>
-		</form>
-	</div>
-	<div style=" width: 50%; margin-right: 0;">
+<div style="display: inline-flex; width: 100%; overflow: hidden; background-color: rgba(0,0,100,0.1); border-radius: 5%; height: 90vh; margin-top: 5vh;">
+	<div style=" width: fit-content%; display: grid; margin: 0;">
+		<div style="margin-left: 0%; margin-top: 5%; overflow: auto; display: flex; height: fit-content;">
 		{% for user in users %}
 			<div class="modal">
 				<div class="modal-content">
@@ -62,7 +27,7 @@
 						</p>
 					</div>
 					</div>
-					<img src="#">
+					<img src="#" style="margin: auto;">
 					<form method="POST" action="javascript:void(0);" id="login-modal-{{forloop.counter}}-form" onsubmit="loginFun('{{forloop.counter}}');">
 						{% csrf_token %}
 						{% for field in login %}
@@ -76,19 +41,56 @@
 				</div>
 
 			</div>
-			<div style=" display: block; text-align: center;" onclick="loginPopUp(this, '{{forloop.counter}}', '{{user.email}}' )">
+			<div style=" display: block; text-align: center; width: fit-content; margin-left: 70px; height: fit-content;" onclick="loginPopUp(this, '{{forloop.counter}}', '{{user.email}}' )">
 				
-				<img src = {% if user.pic %} "{{user.pic.url}}" {% else %} "{% static 'fixed/profile.jpg' %}"  {% endif %}>
+				<img src = "{{user.pic}}" style="height: 200px; width: 200px; border-radius: 25%;">
 				
 				<br>
-				<b>{{user.full_name}}</b>
+				<b style="color: white;">{{user.full_name}}</b>
 			</div>
-			{% if forloop.counter|divisibleby:3 %}
+			{% if forloop.counter|divisibleby:2 %}
 		</div>
-		<div style=" display: block; text-align: center;">
+		<div style=" display: block; text-align: center; height: fit-content;">
 			{% endif %}
-		{% endfor %}
+		{% endfor %}</div>
+	</div>
+	<div style="margin-left: auto; height: inherit; background-color: rgba(100, 50,250, 0.5); border-radius: 5%; border-top-left-radius: 0;  padding: 5%; width: 38%;">
+		<div style="margin: auto; width: fit-content; margin-top: 40%;">
+		<form method="POST" action="{% url 'login' %}" style="display: grid; margin: auto;">
+			{% csrf_token %}
+			{% if login.errors %}
+				<mark style="position: absolute; margin-left: -15%; padding: 10px; color: white; background-color: rgba(50,0,0,0.2); margin-top: -5%; border-radius: 10px; font-weight: bold;">Your email or password is not correct, maybe both idk and i don't give a fuck! :D</mark>
+				{% endif %}
+			{% for field in login %}
+
+			<label style="color: white;">{{field.label}}:</label>
+			<div style="width: 90%; margin: auto; margin-top: 5px;">
+				{{field}}
+			</div>
+			<br>
+			{% endfor %}<button id="login-button" style="">login</button>
+		</form>
+		</div>
+		<br>
+		<div class="social-container" style="margin: auto; width: fit-content;">
+			<a href= "#">
+				<img src="{% static 'images/icons/facebook.jpg' %}" width="50px" height="50px" style="border-radius: 50%;">
+			</a>
+			<a href="{% provider_login_url 'google' %}" style="margin-left: 10px;">
+				<img src="{% static 'images/icons/google.jpg' %}" width="50px" height="50px" style="border-radius: 50%;">
+			</a>
+			<a href="#" style="margin-left: 10px;">
+				<img src="{% static 'images/icons/twitter.jpg' %}" width="50px" height="50px" style="border-radius: 50%">
+			</a>
+		</div><br>
+		<div style="text-align: center;">
+			<a href="#" style="color: white; text-decoration: none;">Forget password?</a>
+			<a href="#" style="color: white; text-decoration: none; margin-left: 25%;">SignUp?</a>
+		</div>
 	</div>
 </div>
+
+
+	
 </body>
 </html>

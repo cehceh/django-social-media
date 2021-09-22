@@ -32,7 +32,7 @@ class PostFilesSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = PostFiles
-        fields = ('id', 'caption', 'media')
+        fields = ('id', 'content', 'media')
 
 class SharedPostSerializer(serializers.ModelSerializer):
     files = PostFilesSerializers(many = True, source = 'post_file' , read_only = True)

@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 class MessageForm(forms.ModelForm):
 	content = forms.CharField(required=False ,max_length=255)
-	file = forms.FileField(required=False, widget=forms.FileInput(attrs={'multiple': 'true'}))
+	file = forms.FileField(required=False, widget=forms.FileInput(attrs={'multiple': 'true', 'class': 'hidden'}))
 	record = forms.FileField(required=False, widget=forms.FileInput(attrs={'class': 'hidden'}))
 	class Meta:
 		model=Message

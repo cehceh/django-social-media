@@ -5,4 +5,3 @@ from .models import *
 admin.site.register(Message)
 admin.site.register(MessageMedia)
 
-admin.site.register(AnonymousMessage)

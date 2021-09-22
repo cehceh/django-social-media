@@ -60,6 +60,8 @@ urlpatterns = [
 	path('create-group', media_views.CreateGroup, name='create-group'),
 	path('accept/user/group/join/request/', media_views.AcceptGroupJoinReq, name='accept-group-request'),
 	path('deny/user/group/join/request/', media_views.DenyGroupJoinReq, name='deny-group-request'),
+	path('invite/group/member/', media_views.InviteGroupMember, name='invite-group-member'),
+
 	##FriendShip
 	path('add-user/number-<int:pk>', media_views.AddFriendView, name="add-friend"),
 	path('remove-user/number-<int:pk>', media_views.RemoveFriendView, name="remove-friend"),
@@ -85,6 +87,8 @@ urlpatterns = [
 	#getting stuff
 	path('get/10-comments/on/post-number/<int:pk>/<int:counts>', publish_views.GetPostComment, name='get-comments'),
 	path('get/10-posts/<int:counts>', publish_views.GetPosts, name='get-posts'),
+	path('get/group/10-posts/', publish_views.getGroupPosts, name='get-group-posts'),
+	path('get/page/10-posts/', publish_views.getPagePosts, name='get-page-posts'),
 
 
 	path('save/post/', publish_views.SavePost, name='save-post'),

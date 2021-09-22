@@ -186,5 +186,5 @@ ACCOUNT_USERNAME_REQUIRED = False
 
 
 SITE_ID = 2
-ACCOUNT_FORMS = {'signup': 'media.forms.SignUpForm'}
+ACCOUNT_FORMS = {'signup': 'media.forms.SignUpForm', 'login': 'media.forms.SignUpForm'}
 

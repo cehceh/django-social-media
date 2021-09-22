@@ -20,6 +20,12 @@
   width: 25%; /* Could be more or less, depending on screen size */
 }
 
+#login-button {
+  width: 50%; margin: auto; border-radius: 10px; outline: none; border: transparent; padding: 5px; color: white; background-color: rgba(0,0,100, 0.2); cursor: pointer;
+}
+#login-button:hover{
+  background-color:  rgba(255,255,255,0.1);
+}
 .modal-content * {
   margin: auto;
 }

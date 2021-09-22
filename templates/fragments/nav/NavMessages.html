@@ -11,7 +11,7 @@
                 <div class="message-container">
                   <div style="height: 75px;">
                     <div class="request-sender-img-container" style=" display: inline-flex; word-break: break-all;">
-                    <img {% if not message.sender == request.user %} src="{{message.sender.pic.url}}" {% else %} src="{{message.receiver.pic.url}}" {% endif %}>
+                    <img {% if not message.sender == request.user %} src="{{message.sender.pic}}" {% else %} src="{{message.receiver.pic}}" {% endif %}>
                     <small style="color: white;">
   {% if message.sender == request.user %}
   {{message.receiver.full_name}}

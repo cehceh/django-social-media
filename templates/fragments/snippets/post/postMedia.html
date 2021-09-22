@@ -4,13 +4,9 @@
 				{% with post.post_file.all.first as file %}
 				<div id="post-{{post.pk}}-media-display">
 					{% if file.media|videoEx == True %}
-					<img src="{{file.media.url}}" onclick="DisplayFullImg(this);">
-					{% elif file.media %}
 					<video src="{{file.media.url}}" controls></video>
 					{% else %}
-					<audio controls>
-						<source src="{{file.record.url}}" type="audio/ogg">
-					</audio>
+					<img src="{{file.media.url}}" onclick="DisplayFullImg(this);">
 						
 				{% endif %}
 						
@@ -46,9 +42,9 @@
 						{% endif %} 
 
 						{% if file.media|videoEx == True %}
-						onclick="postImagesDisplay('{{post.pk}}', '{{file.media.url}}', '{{forloop.counter}}', '{{file.caption}}')"
-						{% else %}
 						onclick="postVideosDisplay('{{post.pk}}', '{{file.media.url}}', '{{forloop.counter}}', '{{file.caption}}')"
+						{% else %}
+						onclick="postImagesDisplay('{{post.pk}}', '{{file.media.url}}', '{{forloop.counter}}', '{{file.caption}}')"
 						{% endif %}
 
 						></div>&nbsp
